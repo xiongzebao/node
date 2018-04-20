@@ -1,0 +1,80 @@
+body,h1,h2,h3,h4,h5,h6,hr,p,blockquote,dl,dt,dd,ul,ol,li,pre,form,fieldset,legend,button,input,textarea,th,td,menu{margin:0; padding:0;}
+body,textarea,input,button,select,keygen,legend{font:14px "Microsoft YaHei",tahoma,arial,\5b8b\4f53; color:#303645; outline:0;}
+h1,h2,h3,h4,h5,h6,small{font-size:100%; font-weight:normal;}
+code,kbd,pre,samp,tt{font-family:"courier new",monospace,serif;}
+address,caption,cite,code,dfn,em,strong,th,var{font-style:normal; font-weight:normal;}
+address,cite,dfn,em,var{font-style:normal;}
+header,footer,section,article,aside,nav,hgroup,address,figure,figcaption,menu,details{display:block;}
+table{border-collapse:collapse; border-spacing:0;}
+caption,th{text-align:left;}
+legend{color:#000;}
+fieldset,img,iframe,abbr,acronym{border:0;}
+button,input,select,textarea{font-size:100%;}
+textarea{overflow:auto; resize:none;}
+input[type="text"], input[type="password"]{text-indent:5px; *text-indent:0 !important;}
+ol,ul{list-style:none;}
+q::before,q::after{content:'';}
+a{color:#388af8; text-decoration:none;-webkit-tap-highlight-color:rgba(0,0,0,0);}
+del,ins,u,s,a,a:hover{text-decoration:none;}
+a,button{cursor:pointer;}
+sub,sup{position:relative;font-size:75%;line-height:0;vertical-align:baseline}
+sup{top:-0.5em}
+sub{bottom:-0.25em}
+
+/*html,body{
+    width: 100%;
+    height: 100%;
+  
+}
+#app{
+    width: 100%;
+    height: 100%;
+}*/
+/*mint-ui* 头部resetcss*/
+
+.mint-header {
+	height: 0.8rem;
+	font-size: 0.35rem;
+	line-height: 0.8rem;
+	background: #42cefc!important;
+}
+.mint-header.is-fixed {
+    z-index: 999;
+}
+.mint-header .mintui-back {
+	font-size: 0.35rem;
+	line-height: 0.8rem;
+	
+}
+
+.mint-header .mint-button,
+.mint-header .mint-header-title,
+.mint-header .mint-button-icon {
+	height: 0.8rem;
+	font-size: 0.35rem;
+	line-height: 0.8rem;
+}
+/*toast堆叠属性最大*/
+.mint-toast{
+    z-index:99999!important;
+}
+
+/*定义公共padding-top*/
+.publicMintHeader {
+	padding-top: 0.8rem;
+}
+
+
+.sub-ul .scanpic>div{width:100%!important;height:100%!important;}
+.sub-ul .scanpic canvas {
+	width: 100%!important;
+	height: 100%!important;
+}
+
+.ymjh .medal-wall .medal-share .share-pic .dl #qrcode_canvas canvas {
+	width: 100%!important;
+	height: 100%!important;
+}
+.lf{float:left;}
+.rf{float:right;}
+.f-fixed:after{content:'\200b';display:block;height:0;clear:both;}
