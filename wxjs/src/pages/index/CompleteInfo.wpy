@@ -1,0 +1,59 @@
+<style lang="less">
+.userinfo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.userinfo-avatar {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 50%;
+}
+
+.userinfo-nickname {
+  color: #aaa;
+}
+</style>
+<template>
+  <view class="container">
+    <text>Index</text>
+  </view>
+</template>
+
+<script>
+
+import wepy from 'wepy'
+import BasePage from '../BasePage'
+export default class Index extends  BasePage {
+  config = {
+    navigationBarTitleText: '首页'
+  }
+  components = {
+    
+  }
+
+  data = {
+    
+  }
+
+  computed = {
+    
+  }
+
+  methods = {
+   
+  }
+
+  events = {
+   
+  }
+
+  onLoad(){
+    super.onLoad();
+    this.$parent.getUserInfo((userinfo)=>{
+        //console.log(userinfo);
+    })
+  }
+}
+</script>

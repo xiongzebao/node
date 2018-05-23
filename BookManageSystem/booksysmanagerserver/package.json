@@ -3,13 +3,17 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "supervisor --debug ./bin/www"
+    "start": "supervisor --inspect ./bin/www"
   },
   "dependencies": {
     "body-parser": "~1.17.1",
     "cookie-parser": "~1.4.3",
+    "cors": "^2.8.4",
+    "crc": "^3.5.0",
+    "dayjs": "^1.6.0",
     "debug": "~2.6.3",
     "express": "~4.15.2",
+    "express-session": "^1.15.6",
     "jade": "~1.11.0",
     "morgan": "~1.8.1",
     "mysql": "^2.15.0",

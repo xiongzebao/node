@@ -1,0 +1,249 @@
+<style lang="less">
+.input {}
+.input__combine {
+  position: relative;
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  line-height: 1.4;
+  padding: 24rpx 30rpx;
+  box-sizing:border-box;
+  font-size: 28rpx;
+  color: #333
+}
+.input__combine::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 200%;
+  height: 200%;
+  transform: scale(.5);
+  transform-origin: 0 0;
+  pointer-events: none;
+  box-sizing: border-box;
+  border: 0 solid #e5e5e5;
+  border-bottom-width: 1rpx
+}
+.input__wrapped:after {
+  border: 1rpx solid #e5e5e5;
+  border-radius: 8rpx
+}
+.input__none::after {
+  display: none
+}
+.input__right {
+  text-align: right
+}
+.input__error {
+  color: #fc3c64
+}
+.input__error:after {
+  border-color: #fc3c64
+}
+.input__label {
+  min-width: 163rpx;
+  height: 46rpx;
+  line-height: 46rpx;
+  color: #333
+}
+.input__icon {
+  width: 40rpx;
+  height: 40rpx;
+  line-height: 36rpx;
+  margin-right: 32rpx;
+  color: #999
+}
+.input__form {
+  flex: 1;
+  height: 46rpx;
+  min-height: 46rpx;
+  line-height: 46rpx;
+  font-size: 32rpx
+}
+.input__placeholder {
+  font-size: 28rpx;
+  color: #999
+}
+</style>
+
+<template>
+ <view class="input">
+  <view class="input__combine input__{{mode}} {{error? 'input__error': ''}}">
+    <view class="input__label" wx:if="{{title}}">{{title}}</view>
+    <image wx:if="{{!title && src}}" class="input__icon" mode="aspectFit" src="{{src}}"></image>
+    <icon wx:if="{{!title && !src && icon}}" class="input__icon" 
+    :type="icon" 
+    :color="iconColor" 
+    size="38" 
+    _pid="{{_pid}}"></icon>
+    <input class="input__form {{right? 'input__right' : ''}}" 
+    value="{{value}}" 
+    type="{{type}}" 
+    password="{{password}}" 
+    placeholder="{{placeholder}}" 
+    placeholder-style="{{placeholderStyle}}"
+    placeholder-class="input__placeholder" 
+    disabled="{{disabled}}" 
+    maxlength="{{maxlength}}" 
+    cursor-spacing="{{cursorSpacing}}"
+    focus="{{focus}}"
+    confirm-type="{{confirmType}}" 
+    confirm-hold="{{confirmHold}}" 
+    cursor="{{cursor}}"
+    selection-start="{{selectionStart}}"
+    selection-end="{{selectionEnd}}" 
+    adjust-position="{{adjustPosition}}"
+    bindinput="onInput" 
+    bindfocus="onFocus" 
+    bindblur="onBlur" 
+    bindconfirm="onConfirm"></input>
+  </view>
+</view>
+</template>
+<script>
+import wepy from 'wepy'
+import Icon from './icon'
+import InterfaceUtils from '../js/InterfaceUtils.js'
+export default class Input extends wepy.component {
+
+
+
+  components = {
+   icon:Icon,
+ }
+
+ props = {
+   title: {
+    type: String,
+    default: ''
+  },
+  src: {
+    type: String,
+    default: ''
+  },
+  icon:{
+    type: String,
+    default:'yes'
+  },
+  iconColor: {
+    type: String,
+    default: '#999'
+  },
+  mode: {
+      type: String,
+      default: 'normal' // 输入框的模式选择，可选值：wrapped，有边框包裹, normal，只有下边框，none，无边框
+    },
+    right: {
+      type: Boolean,
+      default: false // 输入框是否居右显示
+    },
+    error: {
+      type: Boolean,
+      default: false
+    },
+    value: {
+      type: String,
+      default: '',
+      twoWay:false
+    },
+    type: {
+      type: String,
+      default: 'text'
+    },
+    password: {
+      type: Boolean,
+      default: false
+    },
+    placeholder: {
+      type: String,
+      default: ''
+    },
+    placeholderStyle: {
+      type: String,
+      default: ''
+    },
+    disabled: {
+      type: Boolean,
+      default: false
+    },
+    maxlength: {
+      type: [Number, String],
+      default: 60
+    },
+    cursorSpacing: {
+      type: [Number, String],
+      default: 0
+    },
+    focus: {
+      type: Boolean,
+      default: false
+    },
+    confirmType: {
+      type: String,
+      default: 'done'
+    },
+    confirmHold: {
+      type: Boolean,
+      default: false
+    },
+    cursor: {
+      type: [Number, String],
+      default: 0
+    },
+    selectionStart: {
+      type: [Number, String],
+      default: -1
+    },
+    selectionEnd: {
+      type: [Number, String],
+      default: -1
+    },
+    adjustPosition: {
+      type: Boolean,
+      default: true
+    }
+  }
+
+  data = {}
+  events = {
+
+  }
+
+  watch = {
+  
+
+  }
+  onLoad() {
+    ////console.log("maxlength"+this.maxlength);
+ 
+  }
+
+    methods = {
+     onInput: function onInput(event) {
+    //  var detail = event.detail;
+     // var option = {};
+      this.$emit('onInput', event);
+
+    },
+    onFocus: function onFocus(event) {
+      var detail = event.detail;
+      var option = {};
+      this.$emit('onFocus', detail);
+    },
+    onBlur: function onBlur(event) {
+      var detail = event.detail;
+      var option = {};
+      this.$emit('onBlur', detail);
+    },
+    onConfirm: function onConfirm(event){
+      var detail = event.detail;
+      var option = {};
+      this.$emit('onConfirm', detail);
+    }
+
+  }
+
+}
+</script>

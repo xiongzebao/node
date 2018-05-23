@@ -1,0 +1,70 @@
+<style lang="less">
+.userinfo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.userinfo-avatar {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 50%;
+}
+
+.userinfo-nickname {
+  color: #aaa;
+}
+</style>
+<template>
+  <view class="container">
+     <button class="confirm"  bindtap="onConfirm"> 签到</button>
+  </view>
+</template>
+
+<script>
+
+import wepy from 'wepy'
+import BasePage from '../BasePage'
+
+export default class Index extends  BasePage {
+  config = {
+    navigationBarTitleText: '签到'
+  }
+  components = {
+    
+  }
+
+  data = {
+    
+  }
+
+  computed = {
+    
+  }
+
+  methods = {
+    onConfirm(){
+      console.log("confirm");
+    /*  wx.navigateTo({
+        url:  '../index/index'
+      })*/
+        wx.navigateTo({
+        url:  './submit'
+      })
+    }
+   
+  }
+
+  events = {
+   
+  }
+
+  onLoad(){
+   
+    this.$parent.getUserInfo((userinfo)=>{
+        //console.log(userinfo);
+    })
+
+  }
+}
+</script>

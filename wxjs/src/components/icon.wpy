@@ -1,0 +1,53 @@
+<style lang="less">
+ @import  '../less/base-less.less';
+ @import  (inline)  url(@icon-font-url);
+
+</style>
+<template>
+  <view class="iconfont icon-{{type}} " style="font-size:{{size}}rpx; color:{{color}}"></view>
+</template>
+<script>
+import wepy from 'wepy'
+
+export default class Icon extends wepy.component {
+
+  props = {
+      type: {
+        type: String,
+        default: 'adduser'
+      },
+      size: {
+        type: [Number, String],
+        default: 26
+      },
+      color: {
+        type: String,
+        default: '#999'
+      }
+    
+  }
+
+
+
+  onLoad(){
+    //console.log(this.type);
+
+  }
+
+  data = {
+  }
+
+  events = {
+  
+  }
+
+  watch = {
+    
+  }
+
+  methods = {
+    
+  }
+
+}
+</script>

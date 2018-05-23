@@ -1,0 +1,18 @@
+   <view class="input-wrap">
+        <wxc-input type="number"
+                   src="https://s10.mogucdn.com/mlcdn/c45406/171025_7abllhkc011ka5kici7532af6202g_28x40.png"
+                   value="{{mobileNumber}}"
+                   placeholder="请输入充值手机号码"
+                   maxlength="11"
+                   data-type="mobile"
+                   bind:input="onInput"
+                   bind:blur="onBlur">
+        </wxc-input>
+
+        <view class="tips">
+            <text wx:if="{{mobileTip}}" class="warn-tip">请输入正确的手机号码</text>
+            <view wx:if="{{mobileNumber && mobileNumber.length}}" class="clear-wrap" data-type="mobile" bindtap="clearInput">
+                <icon type="clear" size="14" color="#ccc"/>
+            </view>
+        </view>
+    </view>

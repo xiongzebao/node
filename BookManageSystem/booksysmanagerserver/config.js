@@ -1,5 +1,5 @@
 module.exports = {
-	'originList':["http://localhost:8081","http://localhost:4000"],//跨域访问白名单
+	'originList':["http://xiongbin.nat300.top"],//跨域访问白名单
     'superSecret': 'haha,haha',//校验token用的
     'database': 'mongodb://127.0.0.1',
     'host':'localhost',//主机域名

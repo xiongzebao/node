@@ -1,0 +1,58 @@
+<style lang="less">
+.userinfo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.userinfo-avatar {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 50%;
+}
+
+.userinfo-nickname {
+  color: #aaa;
+}
+</style>
+<template>
+  <view class="container">
+    <text>Index</text>
+  </view>
+</template>
+
+<script>
+
+  import wepy from 'wepy'
+import appMixin from '@/mixins/appMixins.js'
+
+export default class BasePage extends wepy.page {
+  config = {
+    navigationBarTitleText: 'test'
+  }
+  components = {
+    
+  }
+ 
+  mixins = [appMixin]
+ 
+  data = {
+    
+  }
+  computed = {
+    
+  }
+
+  methods = {
+   
+  }
+
+  events = {
+   
+  }
+
+  onLoad(){
+ 
+  }
+}
+</script>

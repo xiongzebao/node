@@ -1,0 +1,108 @@
+<style lang="less">
+.container{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+  .section{
+    width: 95%;
+    height: 300rpx;
+    border: 1rpx solid red;
+  }
+</style>
+<template>
+  <view class="container">
+   <view class="section">
+    <textarea  bindinput="onInput" placeholder="请输入说明" value="{{signComment}}" />
+  </view>
+  <button class="confirm"  bindtap="onConfirm"> 签到</button>
+</view>
+</template>
+
+<script>
+
+import wepy from 'wepy'
+import dayjs from 'dayjs'
+import BasePage from '../BasePage'
+import  request from '../../js/NetUtils.js'
+import    api  from '../../js/url.js'
+ import InterfaceUtils from '../../js/InterfaceUtils'
+export default class Index extends  BasePage {
+  config = {
+    navigationBarTitleText: '签到'
+  }
+  components = {
+    
+  }
+
+  data = {
+    signComment:"祝你看看"
+  }
+
+  computed = {
+    
+  }
+
+  methods = {
+    onConfirm(){
+     // var signTime = new Date().format("yyyy-MM-dd hh:mm:ss");
+      let data = {
+        nickName:"xiongbin",
+        signState:1,
+        signComment:this.signComment,
+        isResign:true
+      }
+      request.post(api.ApiSign,data)
+      .then((data) => {
+        InterfaceUtils.showToast(data.message);
+   
+      })
+      .catch((e) => {
+         InterfaceUtils.showToast(e.message);
+          
+      });
+
+  
+    },
+
+    onInput(e){
+      this.signComment=e.detail.value;
+    }
+   
+  }
+
+  events = {
+     onError(e){
+    console.log("onError submit")
+    console.log(e)
+    let data={
+      errorInfo:e,
+      errorType:1,
+      errorCode:500
+    }
+    request.post(api.ApiError,data)
+
+  }
+  }
+
+   onError(e){
+    console.log("onError submit")
+    console.log(e)
+    let data={
+      errorInfo:e,
+      errorType:1,
+      errorCode:500
+    }
+    request.post(api.ApiError,data)
+
+  }
+
+
+  onLoad(){
+   
+       console.log("fdsfs")
+ console.log(dayjs().format("YYYY-MM-DD HH:mm:ss"));
+  
+  }
+}
+</script>

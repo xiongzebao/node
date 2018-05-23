@@ -1,16 +1,20 @@
-
+/*
 var connection = require("./database.js")
-let createTables = new Array();
+require("./dbUtils.js")*/
 
 
+//let createTables = new Array();
  /*
  *userFlag:0 普通用户，1，超级管理员，2，普通管理员
  */
-createTables.push(
+/*createTables.push(
  `CREATE TABLE IF NOT EXISTS  
   user(
   id int ,
-  nickname varchar(255),
+  nickName varchar(255),
+  gender varchar(30),
+  birthDate varchar(30),
+  registTime varchar(30),
   phone varchar(255),
   userFlag int, 
   password varchar(255))`)
@@ -32,9 +36,8 @@ for(i in createTables){
 	    }
 	})
 }
+*/
 
 
 
 
-
-require("./dbUtils.js")

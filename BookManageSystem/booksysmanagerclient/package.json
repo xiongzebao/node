@@ -10,7 +10,10 @@
     "build": "node build/build.js"
   },
   "dependencies": {
+    "mint-ui": "^2.2.13",
+    "raf.js": "^0.0.4",
     "vue": "^2.5.2",
+    "vue-lazyload": "^1.2.3",
     "vue-router": "^3.0.1",
     "vuex": "^3.0.1"
   },

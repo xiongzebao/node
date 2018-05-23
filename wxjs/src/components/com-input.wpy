@@ -1,0 +1,203 @@
+<style lang="less" scoped>
+.input-wrap {
+  position: relative;
+  width: 100%;
+  height: 100rpx;
+  margin-top: 10rpx;
+
+
+}
+.tips {
+  display: flex;
+  position: absolute;
+  top: 50%;
+  right: 0;
+  font-size: 0;
+  transform: translate(0, -50%);
+  -webkit-transform: -webkit-translate(0, -50%);
+  z-index: 100;
+   margin-right: 30rpx;
+
+}
+.clear-wrap {
+  display: flex;
+  width: 40rpx;
+  height:104rpx;
+  align-items:center;
+  justify-content: flex-end;
+}
+.warn-tip {
+  line-height: 104rpx;
+  font-size: 28rpx;
+  color: #ff5777;
+}
+
+</style>
+<template>
+ <view class="input-wrap">
+  <xinput type="number"
+  :src="src"
+  :value.sync="value"
+  :icon="icon"
+  :type="inputType"
+  :confirmType="confirmType"
+  :placeholder="placeholder"
+  :maxlength="maxlength"
+  @onInput.user="onInput"
+  bind:blur="onBlur">
+</xinput>
+
+<view class="tips">
+  <text wx:if="{{tip}}" class="warn-tip">{{tipValue}}</text>
+  <view wx:if="{{value && value.length}}" class="clear-wrap" bindtap="clearInput">
+    <icon type="shanchu2" size="25" color="#ccc"/>
+  </view>
+</view>
+</view>
+</template>
+<script>
+import wepy from 'wepy'
+import Icon from './icon'
+import Input from './input'
+import InterfaceUtils from '../js/InterfaceUtils.js'
+
+export default class ComInput extends wepy.component {
+    props = {
+      type: {
+        type: [Number, String],
+        default: "mobile"
+      },
+      value:{
+         type: [Number, String],
+        default: "",
+        twoWay:true
+      },
+      tipValue:{
+        type: [String],
+        default: "请输入正确的格式"
+      },
+      placeholder:{
+        type: [Number,String],
+        default: ""
+      },
+      icon:{
+        type:[String],
+        default:"shouji"
+      },
+      confirmType:{
+        type:[String],
+        default:"done"
+      },
+      validity:{
+       type: [Boolean],
+        default: false,
+        twoWay:true
+      },
+      allowEmpty:{
+        type: [Boolean],
+        default: true,
+        twoWay:false
+      },
+      maxlength:{
+        type:[Number,String],
+        default:100
+      }
+    }
+    components = {
+      icon: Icon,
+      xinput: Input,
+    }
+    data = {
+      tip: true
+    }
+    events = {
+
+    }
+
+    computed={
+      inputType:function(){
+         if(this.type === "qq"||this.type === "mobile"){
+          return "number"
+         }else if(this.type === "idcard"){
+          return "idcard"
+         }else{
+          return "text"
+         }
+          
+      }
+    }
+
+    watch = {
+
+    }
+
+   onLoad() {
+    //////console.log("com input maxlength:"+this.maxlength);
+
+  }
+    methods = {
+      onInput(e) {
+        let type = this.type;
+        let number = e.detail.value;
+        this.value = number;
+        this.validate(number, type);
+      },
+      onBlur(e) {
+        let type = this.type;
+        let number = e.detail.value;
+        this.validate(number, type);
+      },
+      clearInput(e) {
+         this.value = "";
+      }
+    }
+
+
+  validate(number, type) {
+    if(this.allowEmpty&&number.length==0){
+      this.tip = true;
+      return;
+    }
+    if (type === "mobile") {
+      this.validateTelephone(number);
+    }
+    if (type === "qq") {
+      this.validateQQ(number);
+    }
+    if(type === "text"){
+      this.valideText(number);
+    }
+  }
+  validateTelephone(number) {
+    let regPhone = /^1(3|4|5|7|8)\d{9}$/;
+    let tip = false;
+    if (!regPhone.test(number) && number.length > 0) {
+      // 输入7位以上开始校验手机号码
+      tip = true;
+    }
+    this.tip = tip
+    this.validity = !tip;
+     if(number.length==0){
+      this.validity = false;
+     }
+  }
+  validateQQ(number) {
+    let tip = false;
+    let regQQ = /^[1-9]\d{4,10}$/;
+    if (!regQQ.test(number) && number.length > 0) {
+      // 输入4位以上开始qq号码
+      tip = true;
+    }
+    this.tip = tip
+    this.validity = !tip;
+     if(number.length==0){
+      this.validity = false;
+     }
+  }
+
+  valideText(text){
+    this.tip = false;
+  }
+
+  } 
+  </script>

@@ -1,0 +1,198 @@
+<style lang="less" scoped>
+
+@import '../../less/base-less.less';
+.root{
+  display: flex;
+  flex-direction: column;
+   align-items: center;
+}
+.avatar {
+  display: block;
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: 50%;
+}
+.picker{
+  width: 100%;
+  margin-left: 0rpx;
+}
+
+.tipText{
+  font-size: 28rpx;
+  padding: 20rpx;
+  width: 80%;
+  margin-top: 50rpx;
+  box-shadow: 1rpx 1rpx 1rpx 1rpx #f9f9f9;
+  background: #fafafa;
+  color: orange;
+}
+
+.confirm{
+  width: 80%;
+  margin-top: 120rpx;
+}
+</style>
+<template>
+  <view class ="root">
+   <image  class="avatar"   src="{{avatarUrl}}"></image>
+  <ComInput 
+  placeholder="请输入昵称"
+  :tipValue="nickTip"
+  :value.sync="nickName"
+  confirmType="done"
+  :validity="nickValidity"
+  maxlength="7"
+  icon="shouji"
+  type="text"/>
+  
+  <picker class="picker" bindchange="bindPickerChange" value="{{genderIndex}}" range="{{genderArray}}">
+    <Show :value.sync="gender" placeholder="性别" tipValue=""></Show>
+  </picker>
+  <picker class="picker" mode="date" value="{{date}}" start="1960-01-01" end="2010-01-01" bindchange="bindDateChange">
+    <ShowA :value.sync="dateValue" :tipValue.sync="dateTip" placeholder="生日"></ShowA>
+  </picker>
+  <text class ="tipText" space="ensp">{{text}}</text>
+  <button class="confirm" loading="{{showLoading}}" bindtap="onConfirm">{{btnValue}}</button>
+
+</view>
+</template>
+
+<script>
+
+import wepy from 'wepy'
+import dayjs from 'dayjs'
+import BasePage from '../BasePage'
+ import InterfaceUtils from '../../js/InterfaceUtils'
+import Icon from '../../components/icon'
+import Input from '../../components/input'
+import ComInput from '../../components/com-input'
+import Show from '../../components/show'
+import appMixin from '../../mixins/appMixins'
+
+import  request from '../../js/NetUtils.js'
+import   {ApiComInfo}  from '../../js/url.js'
+
+export default class Index extends  BasePage {
+
+  minxins=[appMixin]
+  config = {
+    navigationBarTitleText: '首页',
+  }
+
+  components = {
+    icon:Icon,
+    ComInput:ComInput,
+    ComInputA:ComInput,
+    Show:Show,
+     ShowA:Show
+  }
+
+  data = {
+    avatarUrl:"",
+    nickName:"xiaoxiong",//昵称
+    dateValue:"",//生日
+    nickValidity:false,//昵称是否有效
+  
+    genderIndex:0,
+    genderArray: ['男', '女'],
+    maxlength:7,
+    nickTip:"请输入正确的昵称",
+    text:"    这是温馨提示,所有提示确保都是正确的，因为平台将根据个人情况定制解决方案",
+    showLoading:false,
+    btnValue:"确     定",
+    dateTip:""
+
+  }
+
+  computed = {
+    gender(){
+      return this.genderArray[this.genderIndex];
+    }
+
+  }
+  watch = {
+  
+  }
+  methods = {
+
+  }
+  bindPickerChange(e) {
+    this.genderIndex = e.detail.value;
+  }
+  bindDateChange(e) {
+ 
+    this.dateValue = e.detail.value;
+  }
+  onConfirm(){
+
+  
+    if (this.nickName.length === 0) {
+      InterfaceUtils.showToast("昵称不能为空");
+      return;
+    }
+    if (this.dateValue.length === 0) {
+      this.dateTip = "请选择生日"
+    }
+    this.showLoading = true;
+    this.btnValue = "正在加载";
+
+    let option = {
+      data:{
+        nickName:this.nickName,
+        gender:this.gender,
+        birthDate:this.dateValue,
+        dateTime:new Date().toLocaleString()
+      },
+      url: ApiComInfo,
+      complete: () => {
+        this.showLoading = false;
+        this.btnValue = "确定";
+        this.$apply()
+      }
+    }
+
+    request.post(option)
+      .then((data) => {
+        InterfaceUtils.showToast(data.message);
+       console.log(data)
+      })
+      .catch((e) => {
+        console.log(e)
+        InterfaceUtils.showToast(e.message)
+       
+      });
+
+
+  }
+  onShow() {
+
+  }
+
+  events = {
+
+  }
+
+  onLoad(){
+
+    super.onLoad();
+
+   
+ 
+
+   // console.log(request.post('./users/login'))
+
+    /*let that = this
+      //console.log("onLoad");
+    this.$parent.getUserInfo((userinfo)=>{
+      //console.log("头像");
+      //console.log(userinfo);
+      that.avatarUrl = userinfo.avatarUrl;
+
+      //console.log(that.avatarUrl);
+      this.$apply();
+    })*/
+
+
+  }
+}
+</script>

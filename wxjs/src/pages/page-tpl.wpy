@@ -1,0 +1,48 @@
+<style lang="less">
+
+</style>
+<template>
+  <view class="container">
+   <text>info</text>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+import BasePage from './BasePage'
+import  request from '../../js/NetUtils.js'
+import   {ApiComInfo}  from '../../js/url.js'
+export default class xx extends  BasePage {
+    config = {
+      navigationBarTitleText: 'test'
+    }
+    components = {
+ 
+    }
+
+   
+
+    data = {
+    
+    }
+
+    computed = {
+      now () {
+        return +new Date()
+      }
+    }
+
+    methods = {
+    
+    }
+
+    events = {
+    
+    }
+
+    onLoad() {
+    
+    
+    }
+  }
+</script>
