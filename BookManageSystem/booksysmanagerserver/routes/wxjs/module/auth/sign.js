@@ -1,16 +1,12 @@
 var express = require('express');
 var router = express.Router();
 const rootPath = process.cwd();
-
-var commenModelPath = rootPath + "/model/CommenModel.js";
-var signPath = rootPath + "/dao/sign.js";
-var utilsPath = rootPath + "/public/javascripts/utils"
-
 let {
-	RespBaseData
-} = require(commenModelPath)
-let signDao = require(signPath)
-let utils = require(utilsPath)
+	RespBaseData,
+	Resovle
+} = require(rootPath + "/model/CommenModel.js")
+let signDao = require( rootPath + "/dao/sign.js")
+let utils = require(rootPath + "/public/javascripts/utils")
 let resUtils = require(rootPath + "/public/javascripts/resUtils")
 
 router.use(function(req, res, next) {
@@ -32,8 +28,9 @@ router.route('/sign').post(function(req, res, next) {
 });
 
 
+
 let querylast3days = function(req, res, next) {
-	signDao.querylast3days()
+	signDao.querylastdays({lastDays:3})
 		.then((data) => {
 			resUtils.sendData(res, data);
 		})
@@ -50,9 +47,19 @@ let getSignInfo = function(req, res, next) {
 			resUtils.sendData(res, data);
 		})
 		.catch(next)
-
 }
-router.route('/getsigninfo').post(getSignInfo).get(getSignInfo);
+router.route('/querysigninfo').post(getSignInfo).get(getSignInfo);
+
+//获取所有签到信息
+let getAllSignInfo = function(req, res, next) {
+	 let t=!utils.isEmpty(req.body)?req.body:req.query;
+	signDao.getAllSignInfo(t)
+		.then((data) => {
+			resUtils.sendData(res, data.setData({list:data.data}));
+		})
+		.catch(next)
+}
+router.route('/queryallsigninfo').post(getAllSignInfo).get(getAllSignInfo);
 
 
 module.exports = router;

@@ -4,9 +4,9 @@
 */
 var express = require('express');
 var apiRoutes = express.Router();
-var usersRouter =  require("./module/users.js");
-var signRouter =  require("./module/sign.js");
-apiRoutes.use("/users",usersRouter)
+
+var signRouter =  require("./module/auth/sign.js");
+
 apiRoutes.use("/sign",signRouter)
 
 

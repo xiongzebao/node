@@ -60,6 +60,8 @@ app.use(session({
 //wxjs根路由
 var wxjsRootRouter = require('./routes/wxjs/index');
 let resUtils = require("./public/javascripts/resUtils");
+const rootPath = process.cwd();
+let {RespBaseData,Resolve} = require( rootPath + "/model/CommenModel.js")
  
 app.use("/wxjs",wxjsRootRouter)
 
@@ -78,12 +80,18 @@ app.use(function(req, res, next) {
 
 // error handler
 app.use(function(err, req, res, next) {
+    if(err instanceof Resolve){
+      console.log("---system error----")
+      resUtils.sendData(res,err);
+      return;
+    }
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
   res.status(err.status || 500);
-  console.log(err.stack);
-  errorLogger.insert(err.stack,err.status,2)
-    resUtils.sendError(res,err.stack);
+  console.log(err||err.stack);
+  let errmsg = err.stack||err;
+  errorLogger.insert(errmsg,err.status,2)
+    resUtils.sendError(res,errmsg);
 });
 
 

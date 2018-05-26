@@ -23,7 +23,6 @@ class DBOperation {
 	*/
 	query(sql) {
 		return new Promise((resolve, reject) => {
-				console.log(sql);
 			let queryResult = (error, results, fields) => {
 				if (error) {
 					reject(error);

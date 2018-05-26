@@ -18,6 +18,10 @@ class RespBaseData {
 		return this;
 	}
 
+	setCode(code){
+		this.code = code;
+	}
+
 	/*
 			设置成功返回的消息
 	 	*/
@@ -63,9 +67,22 @@ class RespBaseData {
 
 class Resolve {
 	constructor() {
+		this.success = true;
 		this.error = false;
 		this.data = {};
 		this.message = ""
+	 
+	}
+	setData(data){
+		this.data = data;
+		this.success = true;
+		this.error = false;
+		return this;
+	}
+
+	 code(code){
+		this.code = code;
+		return this;
 	}
 
 	static success(data) {
@@ -76,17 +93,23 @@ class Resolve {
 			t.data = data;
 		}
 		t.error = false;
+		t.success = true;
 		return t;
 	}
+
 	static fail(data) {
 		let t = new Resolve();
 		if (typeof(data) === "string") {
 			t.message = data;
 		}
 		t.error = true;
+		t.success= false;
+
 		return t;
 
 	}
+
+	
 }
 
 exports.RespBaseData = RespBaseData;

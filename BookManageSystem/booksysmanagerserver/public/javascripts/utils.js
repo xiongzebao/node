@@ -36,6 +36,10 @@ let utils = {
 			return true;
 		}
 
+		if(typeof(object)=="string"&&object==""){
+			return true;
+		}
+
 		if (object instanceof Array) {
 			if (object.length == 0) {
 				return true;
@@ -43,6 +47,9 @@ let utils = {
 		}
 
 		var arr = Object.keys(object);
+		console.log("arr")
+		console.log(arr)
+
 		if (arr.length == 0) {
 			return true;
 		}
@@ -59,11 +66,12 @@ let utils = {
 			return false
 		}
 		let keys= attrs.split(",");
-		console.log(keys)
 		if (Array.isArray(keys)) {
 			for (var i = 0; i < keys.length; i++) {
 				let t = keys[i];
-				if (!object.hasOwnProperty(keys[i])) {
+				if (!object.hasOwnProperty(t)||this.isEmpty(object[t])) {
+					console.log(JSON.stringify(object))
+					throw new Error(`${t} 为空，${t}=${object[t]}  `)
 					return false;
 				}
 			}
