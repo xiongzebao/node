@@ -32,13 +32,18 @@ Date.prototype.format = function(fmt) {
 
 let utils = {
 	isEmpty(object) {
-		if (!object) {
+		if (object==="undefined"||object==null) {
 			return true;
 		}
 
 		if(typeof(object)=="string"&&object==""){
 			return true;
 		}
+ 		if(typeof(object)=="number"){
+			return false;
+		}
+ 		
+		 //console.log(typeof(object))
 
 		if (object instanceof Array) {
 			if (object.length == 0) {
@@ -47,9 +52,6 @@ let utils = {
 		}
 
 		var arr = Object.keys(object);
-		console.log("arr")
-		console.log(arr)
-
 		if (arr.length == 0) {
 			return true;
 		}
@@ -62,7 +64,7 @@ let utils = {
 	*/
 	contains(object, attrs) {
 		if (this.isEmpty(object) || this.isEmpty(attrs)) {
-			console.log("isEmpty");
+			//console.log("isEmpty");
 			return false
 		}
 		let keys= attrs.split(",");
@@ -70,7 +72,7 @@ let utils = {
 			for (var i = 0; i < keys.length; i++) {
 				let t = keys[i];
 				if (!object.hasOwnProperty(t)||this.isEmpty(object[t])) {
-					console.log(JSON.stringify(object))
+					//console.log(JSON.stringify(object))
 					throw new Error(`${t} 为空，${t}=${object[t]}  `)
 					return false;
 				}

@@ -17,13 +17,13 @@ let dayjs = require("dayjs");
 
 router.route('/error').post(function(req, res, next) {
 	//resUtils.sendData(res,"错误信息")
-	console.log(req.body)
+	//console.log(req.body)
 
 	let currentTime = dayjs().format("YYYY-MM-DD HH:mm:ss");
-	 if(!utils.contains(req.body,"errorInfo,errorCode,errorType")){
+	/* if(!utils.contains(req.body,"errorInfo,errorCode,errorType")){
 	 	resUtils.sendError(res,"参数错误"+req.body)
 	 	return;
-	 }
+	 }*/
 	 req.body.createTime = currentTime;
 	 db.insert("error",req.body);
 			 

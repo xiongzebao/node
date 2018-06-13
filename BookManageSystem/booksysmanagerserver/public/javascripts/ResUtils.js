@@ -17,7 +17,7 @@
 
  	sendData: (res, data) => {
  		let resdata = "";
- 		console.log(`data: ${data}`);
+ 		//console.log(`data: ${data}`);
  		if (utils.isEmpty(data)) {
  			throw new Error("sendData()'s param is Empty");
  		}
@@ -29,6 +29,7 @@
  			if(!utils.isEmpty(data.code)){
  				resdata.code = data.code;
  			}
+ 			resdata.datas = data.data;
  		} else {
  			resdata = RespBaseData.getInstance().setDatas(data.data);
  			resdata.message = data.message;

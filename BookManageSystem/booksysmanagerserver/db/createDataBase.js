@@ -31,7 +31,7 @@ for(i in createTables){
 	connection.query(createTables[i],
 	   function(err,result){
 	    if(err){
-	      console.log(err)
+	      //console.log(err)
 	      throw err
 	    }
 	})

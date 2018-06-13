@@ -69,14 +69,16 @@ class Resolve {
 	constructor() {
 		this.success = true;
 		this.error = false;
-		this.data = {};
 		this.message = ""
 	 
 	}
 	setData(data){
 		this.data = data;
-		this.success = true;
-		this.error = false;
+		return this;
+	}
+
+	data(data){
+		this.data = data;
 		return this;
 	}
 

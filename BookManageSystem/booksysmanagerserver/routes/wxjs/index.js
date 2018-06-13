@@ -13,5 +13,10 @@ var publicRouter = require('./public.js')
 router.use('/auth',authRouter)
 router.use('/public',publicRouter)
 
+router.use((req,res,next)=>{
+	//console.log("roototootototototo")
+	next();
+})
+
  
 module.exports = router;

@@ -9,9 +9,27 @@ class DBOperation {
 		this.conn = connection;
 	}
 	//查询函数
-	query(table, values, queryResult) {
-		let condition = this.formatCondition("and", values);
-		conn.query(' SELECT * FROM ' + table + ' WHERE ' + condition.sql, condition.param, queryResult);
+	queryByParam(table, values) {
+		return new Promise((resolve, reject) => {
+
+			//console.log("dfdfdsfdfdfsdffs")
+			let condition = this.formatCondition("and", values);
+			//console.log("00000000000000000000000000")
+			//console.log(values);
+
+			let queryResult = (error, results, fields) => {
+				if (error) {
+					reject(error);
+				}
+				resolve(results)
+			}
+		 
+		   //console.log(condition.sql);
+		   //console.log(condition.param);
+			conn.query(' SELECT * FROM ' + table + ' WHERE ' + condition.sql, condition.param, queryResult);
+		})
+
+
 	}
 
 	/*
@@ -29,7 +47,7 @@ class DBOperation {
 				}
 				resolve(results)
 			}
-				conn.query(sql, queryResult);
+			conn.query(sql, queryResult);
 		})
 	}
 

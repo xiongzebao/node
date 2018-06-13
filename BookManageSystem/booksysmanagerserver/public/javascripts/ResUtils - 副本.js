@@ -22,7 +22,7 @@ var utils = require(utilsPath)
  	sendData: (res, data) => {
  		let resdata = "";
 
- 		console.log(`data: ${data}`);
+ 		//console.log(`data: ${data}`);
 
  		if(utils.isEmpty(data)){
  			throw new Error("sendData()  the data is Empty");

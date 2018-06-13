@@ -15,7 +15,7 @@ var connection = mysql.createConnection({
 //创建一个connection
 connection.connect(function(err){
     if(err){        
-          console.log('[query] - :'+err);
+          //console.log('[query] - :'+err);
         return;
     }
 });  
@@ -29,5 +29,5 @@ module.exports = connection;
     if(err){        
         return;
     }
-      console.log('[connection end] succeed!');
+      //console.log('[connection end] succeed!');
 });*/

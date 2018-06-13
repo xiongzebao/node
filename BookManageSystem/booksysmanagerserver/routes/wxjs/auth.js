@@ -7,13 +7,18 @@ var apiRoutes = express.Router();
 
 var signRouter =  require("./module/auth/sign.js");
 
-apiRoutes.use("/sign",signRouter)
+
 
 
 apiRoutes.use(function(req, res, next) {
-     // res.json({ message: 'Welcome to /api' });
-
-      next();
+    //统一往body中加用户id
+    let t= {};
+    Object.assign(t,req.body);
+    req.body =  t;
+    req.body.userId =`"${req.get("userId")}"`
+    //console.log("-----------")
+    //console.log(req.body);
+    next();
   /*  //检查post的信息或者url查询参数或者头信息
     var token = req.body.token || req.query.token || req.headers['x-access-token'];
     // 解析 token
@@ -39,5 +44,5 @@ apiRoutes.use(function(req, res, next) {
 
     }*/
 });
-
+apiRoutes.use("/sign",signRouter)
 module.exports = apiRoutes;

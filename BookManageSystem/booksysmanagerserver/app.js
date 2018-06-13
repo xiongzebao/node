@@ -29,8 +29,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 var whitelist = config.originList;
 var corsOptions = {
   origin: function(origin, callback) {
-    console.log(whitelist);
-    console.log(origin);
+    //console.log(whitelist);
+    //console.log(origin);
     /* let ret= whitelist.indexOf(origin)
      if (ret !== -1) {
        callback(null, true)
@@ -57,43 +57,46 @@ app.use(session({
    });*/
 //业务相关
 
-//wxjs根路由
-var wxjsRootRouter = require('./routes/wxjs/index');
-let resUtils = require("./public/javascripts/resUtils");
-const rootPath = process.cwd();
-let {RespBaseData,Resolve} = require( rootPath + "/model/CommenModel.js")
- 
-app.use("/wxjs",wxjsRootRouter)
 
 
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
-  var err = new Error('Not Found');
+  //console.log("9999")
+  req.body.userId = req.get("userId");
+  /*var err = new Error('Not Found');
   err.status = 404;
   res.status(err.status || 500);
   res.json({
     "error": err
   })
-  next(err);
+  next(err);*/
+  next()
 });
 
 // error handler
 app.use(function(err, req, res, next) {
     if(err instanceof Resolve){
-      console.log("---system error----")
+      //console.log("---system error----")
       resUtils.sendData(res,err);
       return;
     }
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
   res.status(err.status || 500);
-  console.log(err||err.stack);
+  //console.log(err||err.stack);
   let errmsg = err.stack||err;
   errorLogger.insert(errmsg,err.status,2)
     resUtils.sendError(res,errmsg);
 });
 
+//wxjs根路由
+var wxjsRootRouter = require('./routes/wxjs/index');
+let resUtils = require("./public/javascripts/ResUtils");
+const rootPath = process.cwd();
+let {RespBaseData,Resolve} = require( rootPath + "/model/CommenModel.js")
+ 
+app.use("/wxjs",wxjsRootRouter)
 
 
 module.exports = app;
