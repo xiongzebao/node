@@ -28,7 +28,8 @@ Date.prototype.format = function(fmt) {
 }
 
 
-
+import  request from './js/NetUtils.js'
+import api from './js/url.js'
 
 
 let utils = {
@@ -71,7 +72,20 @@ let utils = {
 		}
 		
 		return true;
+	},
+
+	//发送错误到服务端
+sendError(e){
+	let option = {
+		data:e,
+		url:api.ApiError,
+		method:"post",
+		success:function(data){
+			console.log(data)
+		}
 	}
+	 wx.request(option)
+}
 
 }
 

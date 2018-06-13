@@ -2,45 +2,79 @@
 
 </style>
 <template>
-  <view class="container">
-   <text>stat</text>
-  </view>
+
+   <wepyCanlendar  
+   :currentDate.sync="currentDate" 
+   :startDate.sync="startDate"
+    :endDate.sync="endDate"
+  :hasIconList.sync="hasIconList"
+   ></wepyCanlendar> 
+   <text>{{comment}}</text>
+
 </template>
 
 <script>
   import wepy from 'wepy'
+  import wepyCanlendar from '../../components/calendar'
+  import dayjs from 'dayjs'
+  import BasePage from '../BasePage'
+  import request from '../../js/NetUtils.js'
+  import api from '../../js/url.js'
+  import InterfaceUtils from '../../js/InterfaceUtils'
 
-  export default class Info extends wepy.page {
-    config = {
-      navigationBarTitleText: 'test'
-    }
+  export default class Stat extends BasePage {
     components = {
- 
+      wepyCanlendar
     }
-
-   
-
-    data = {
-    
-    }
-
     computed = {
-      now () {
-        return +new Date()
-      }
-    }
 
-    methods = {
-    
     }
+    onLoad() {
+
+      let that = this;
+
+      //请求当月的签到信息
+      request.post(api.ApiSignQuery,{queryFlag:1})
+        .then((data) => {
+          that.days = data.datas.list;
+          that.days.forEach((item) => {
+            let t = {
+              index: dayjs(item.signTime).date(),//选中标记的日期（如2018-06-09）
+              status: item.signState,//status目前就两种状态，一种是选中的绿色对勾（值为1），一种是红色的叉叉（值为2）
+            }
+            that.hasIconList.push(t)
+            that.$apply();
+          })
+           that.$broadcast("startRenderCalendar"); //通知日历组件可以开始渲染 
+        })
+    }
+    data = {
+      currentDate: dayjs().format("YYYY-MM-DD"),
+      startDate: '2017-01-01',
+      endDate: '2018-09-01',
+      hasIconList: [],
+      days: [],
+      comment: ""
+    } // 页面所需数据均需在这里声明，可用于模板数据绑定
 
     events = {
-    
-    }
 
-    onLoad() {
-    
-    
+      //日历当前时间改变回调
+      calChangeCurrentDate: function(date, e) {
+        console.log(date);
+
+      },
+      //选择那一天回调
+      calChangeSelectedDay: function(date, e) {
+        for (let i = 0; i < this.days.length; i++) {
+          if (this.days[i].signTime == date) {
+            console.log(this.days[i].signComment)
+            this.comment = this.days[i].signComment
+            return;
+          }
+        }
+        this.comment = `您${date}没有签到`
+      }
     }
   }
 </script>

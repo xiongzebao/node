@@ -18,13 +18,21 @@
 <template>
   <view class="container">
      <button class="confirm"  bindtap="onConfirm"> 签到</button>
+     <button wx:if="{{canIUse}}" open-type="getUserInfo" bindgetuserinfo="bindGetUserInfo">授权登录</button>
+  <view wx:else>请升级微信版本</view>
+  <text>{{tip}} <text bindtap="onConfirm">去补签</text></text>
+ <text>{{couragementTip}}</text>
   </view>
+
+
 </template>
 
 <script>
 
 import wepy from 'wepy'
 import BasePage from '../BasePage'
+import  request from '../../js/NetUtils.js'
+import    api  from '../../js/url.js'
 
 export default class Index extends  BasePage {
   config = {
@@ -33,24 +41,20 @@ export default class Index extends  BasePage {
   components = {
     
   }
-
   data = {
-    
+     canIUse: wx.canIUse('button.open-type.getUserInfo'),
+     tip:"",
+     couragementTip:""
   }
-
   computed = {
-    
   }
-
   methods = {
     onConfirm(){
-      console.log("confirm");
-    /*  wx.navigateTo({
-        url:  '../index/index'
-      })*/
-        wx.navigateTo({
+    
+      wx.navigateTo({
         url:  './submit'
       })
+    
     }
    
   }
@@ -60,11 +64,21 @@ export default class Index extends  BasePage {
   }
 
   onLoad(){
-   
-    this.$parent.getUserInfo((userinfo)=>{
-        //console.log(userinfo);
+    let that = this;
+    request.post(api.ApiSignQuery,{queryFlag:4}).then((data)=>{
+      console.log(data);
+      that.tip = `您最近3天有 ${data.datas.list.length} 天未签到`
+      that.couragementTip = data.datas.couragementTip
+      that.$apply();
     })
 
+   
   }
+
+  bindGetUserInfo(e) {
+   
+  }
+
+
 }
 </script>

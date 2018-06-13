@@ -45,9 +45,9 @@
   icon="shouji"
   type="text"/>
   
-  <picker class="picker" bindchange="bindPickerChange" value="{{genderIndex}}" range="{{genderArray}}">
+ <!--  <picker class="picker" bindchange="bindPickerChange" value="{{genderIndex}}" range="{{genderArray}}">
     <Show :value.sync="gender" placeholder="性别" tipValue=""></Show>
-  </picker>
+  </picker> -->
   <picker class="picker" mode="date" value="{{date}}" start="1960-01-01" end="2010-01-01" bindchange="bindDateChange">
     <ShowA :value.sync="dateValue" :tipValue.sync="dateTip" placeholder="生日"></ShowA>
   </picker>
@@ -70,7 +70,7 @@ import Show from '../../components/show'
 import appMixin from '../../mixins/appMixins'
 
 import  request from '../../js/NetUtils.js'
-import   {ApiComInfo}  from '../../js/url.js'
+import    api  from '../../js/url.js'
 
 export default class Index extends  BasePage {
 
@@ -89,12 +89,15 @@ export default class Index extends  BasePage {
 
   data = {
     avatarUrl:"",
-    nickName:"xiaoxiong",//昵称
+    nickName:"",//昵称
     dateValue:"",//生日
     nickValidity:false,//昵称是否有效
   
     genderIndex:0,
     genderArray: ['男', '女'],
+
+    userinfo:"",
+    gender:"",
     maxlength:7,
     nickTip:"请输入正确的昵称",
     text:"    这是温馨提示,所有提示确保都是正确的，因为平台将根据个人情况定制解决方案",
@@ -120,12 +123,9 @@ export default class Index extends  BasePage {
     this.genderIndex = e.detail.value;
   }
   bindDateChange(e) {
- 
     this.dateValue = e.detail.value;
   }
   onConfirm(){
-
-  
     if (this.nickName.length === 0) {
       InterfaceUtils.showToast("昵称不能为空");
       return;
@@ -136,14 +136,14 @@ export default class Index extends  BasePage {
     this.showLoading = true;
     this.btnValue = "正在加载";
 
+    let data = this.userinfo;
+    data.nickName = this.nickName;
+    data.birthDate = this.dateValue;
+
+
     let option = {
-      data:{
-        nickName:this.nickName,
-        gender:this.gender,
-        birthDate:this.dateValue,
-        dateTime:new Date().toLocaleString()
-      },
-      url: ApiComInfo,
+      data:data,
+      url: api.ApiComInfo,
       complete: () => {
         this.showLoading = false;
         this.btnValue = "确定";
@@ -173,24 +173,16 @@ export default class Index extends  BasePage {
   }
 
   onLoad(){
-
     super.onLoad();
-
+    let that = this
    
- 
-
-   // console.log(request.post('./users/login'))
-
-    /*let that = this
-      //console.log("onLoad");
     this.$parent.getUserInfo((userinfo)=>{
-      //console.log("头像");
-      //console.log(userinfo);
+      console.log(userinfo);
+      that.nickName = userinfo.nickName;
       that.avatarUrl = userinfo.avatarUrl;
-
-      //console.log(that.avatarUrl);
+      that.userinfo = userinfo;
       this.$apply();
-    })*/
+    })
 
 
   }

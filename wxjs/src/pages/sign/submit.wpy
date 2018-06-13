@@ -45,8 +45,12 @@ export default class Index extends  BasePage {
 
   methods = {
     onConfirm(){
+
+ 
+     
      // var signTime = new Date().format("yyyy-MM-dd hh:mm:ss");
       let data = {
+        userId:"777",
         nickName:"xiongbin",
         signState:1,
         signComment:this.signComment,
@@ -54,10 +58,12 @@ export default class Index extends  BasePage {
       }
       request.post(api.ApiSign,data)
       .then((data) => {
+        console.log(data)
         InterfaceUtils.showToast(data.message);
    
       })
       .catch((e) => {
+         console.log(e)
          InterfaceUtils.showToast(e.message);
           
       });

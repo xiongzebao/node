@@ -1,7 +1,8 @@
 import wepy from 'wepy'
 import InterfaceUtils from './InterfaceUtils'
+import intercept from './NetGlobalIntercept'
 
-import {ApiError} from './url.js'
+
 
 class Request {
 
@@ -24,7 +25,8 @@ class Request {
 		let defaultOption = {
 			method: "POST",
 			header: {
-				'content-type': 'application/json' // 默认值
+				'content-type': 'application/json', // 默认值
+				'userId':wx.getStorageSync("userId")
 			},
 			fail: function(msg) {
 				console.error(msg);
@@ -51,6 +53,8 @@ class Request {
 	/* 用法：
 	  如果只有一个参数，这个参数相当于wx.request(object) 中的object参数
 	  如果有多个参数 参数意义如参数名所示
+
+	  成功执行then方法，失败执行catch方法
 	*/
 	post(url, data, showLoading = false) {
 		if (showLoading) {
@@ -66,51 +70,28 @@ class Request {
 		let that = this;
 		let t = function(resolve, reject) {
 			option.success = (res) => {
-				//如果服务端发生500错误
-				if (res.data.code == 500) {
-					//如果是线上
-					if (true) {
-						let error = res.data.debugInfo;
-						console.log(`error ${error}`)
-						let option = {
-							title: error,
-							duration: 10000,
-							mask: false
-						}
-						InterfaceUtils.showToast(option)
-					}else{
-						InterfaceUtils.showToast("系统繁忙")
-					}
+				if(intercept(res)){
 					return;
 				}
-
-				if(res.data==true){
-					resolve(res.data);
+		 
+		 		let data = res.data;
+				if(data.success==true){
+					resolve(data);
 				}else{
-					reject(res.data);
+					reject(data);
 				}
 				
 		}
 		option.fail = (res) => {
+			console.log(res);
 			InterfaceUtils.showToast("请求失败");
 		}
+
+
 		wx.request(option);
 	}
 	return new Promise(t);
 }
-
-
-/*sendErrorToServer(e){
-	let option = {
-		data:e,
-		url:ApiError,
-		method:"post",
-		success:function(data){
-			console.log(data)
-		}
-	}
-	 wx.request(option)
-}*/
 
 }
 
