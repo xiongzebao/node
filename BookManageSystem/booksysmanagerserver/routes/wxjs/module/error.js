@@ -11,7 +11,7 @@ let {
 } = require(commenModelPath)
 let db = require(dbUtils)
 let utils = require(utilsPath)
-let resUtils = require(rootPath + "/public/javascripts/resUtils")
+let resUtils = require(rootPath + "/public/javascripts/ResUtils")
 
 let dayjs = require("dayjs");
 
