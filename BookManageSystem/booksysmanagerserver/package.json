@@ -3,10 +3,10 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "forever start ./bin/www",
-     "forever_start":"forever start ./bin/www",
-      "forever_restart":"forever restart ./bin/www",
-      "forever_stop":"forever stop ./bin/www"
+    "start": "pm2 start ./bin/www",
+     "pm2_start":"pm2 start ./bin/www",
+      "pm2_restart":"pm2 restart ./bin/www",
+      "pm2_stop":"pm2 stop ./bin/www"
   },
   "dependencies": {
     "body-parser": "~1.17.1",
