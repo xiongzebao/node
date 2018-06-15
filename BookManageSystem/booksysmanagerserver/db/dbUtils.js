@@ -1,5 +1,5 @@
 var conn = require("./database.js")
-var utils = require(process.cwd() + "/public/javascripts/utils");
+var utils = require(path.dirname(require.main.www) + "/public/javascripts/utils");
 
 
 
