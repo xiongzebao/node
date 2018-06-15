@@ -94,7 +94,7 @@ app.use(function(err, req, res, next) {
 var wxjsRootRouter = require('./routes/wxjs/index');
 let resUtils = require("./public/javascripts/ResUtils");
 var path = require("path");
-const rootPath = path.dirname(require.main.www);
+const rootPath = path.dirname(require.main.filename);
 let {RespBaseData,Resolve} = require( rootPath + "/model/CommenModel.js")
  
 app.use("/wxjs",wxjsRootRouter)

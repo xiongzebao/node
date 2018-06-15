@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
-const rootPath = path.dirname(require.main.www);
+var path = require("path");
+const rootPath = path.dirname(require.main.filename);
 
 var commenModelPath = rootPath + "/model/CommenModel.js";
 var dbUtils = rootPath + "/db/dbUtils.js";

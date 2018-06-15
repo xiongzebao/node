@@ -3,10 +3,10 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "pm2 start ./www",
-     "pm2_start":"pm2 start ./www",
-      "pm2_restart":"pm2 restart ./www",
-      "pm2_stop":"pm2 stop ./www"
+    "start": "node ./www",
+    "pm2_start": "pm2 start ./www",
+    "pm2_restart": "pm2 restart ./www",
+    "pm2_stop": "pm2 stop ./www"
   },
   "dependencies": {
     "body-parser": "~1.17.1",

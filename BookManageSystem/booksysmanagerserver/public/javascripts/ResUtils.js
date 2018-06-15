@@ -1,5 +1,5 @@
  var path = require("path");
- const rootPath = path.dirname(require.main.www);
+ const rootPath = path.dirname(require.main.filename);
 
  var commenModelPath = rootPath + "/model/CommenModel.js";
  var utilsPath = rootPath + "/public/javascripts/utils"
