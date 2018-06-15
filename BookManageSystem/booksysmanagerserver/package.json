@@ -3,7 +3,10 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www"
+    "start": "forever start ./bin/www",
+     "forever_start":"forever start ./bin/www",
+      "forever_restart":"forever restart ./bin/www",
+      "forever_stop":"forever stop ./bin/www"
   },
   "dependencies": {
     "body-parser": "~1.17.1",
