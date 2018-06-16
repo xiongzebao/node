@@ -30,7 +30,13 @@ var server = http.createServer(app);
 
 var HttpsServer = http.createServer(options,app).listen(443);
 HttpsServer.on('error', onError);
-HttpsServer.on('listening', onListening);
+HttpsServer.on('listening', ()=>{
+  var addr = HttpsServer.address();
+  var bind = typeof addr === 'string'
+    ? 'pipe ' + addr
+    : 'port ' + addr.port;
+  console.log('HttpsServer Listening on ' + bind);
+});
 
 /**
  * Listen on provided port, on all network interfaces.
@@ -99,3 +105,5 @@ function onListening() {
     : 'port ' + addr.port;
   console.log('Listening on ' + bind);
 }
+
+ 
