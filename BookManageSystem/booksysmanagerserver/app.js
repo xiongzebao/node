@@ -52,9 +52,9 @@ app.use(session({
   }
 }))
 
-/* app.get('/', function(req, res) {
-   // res.send('JWT 授权访问的API路径 http://localhost:'   + '/api');
-   });*/
+ app.get('/', function(req, res) {
+    res.send('JWT 授权访问的API路径 http://localhost:'   + '/api');
+   });
 //业务相关
 
 
