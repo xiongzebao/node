@@ -7,6 +7,13 @@
 var app = require('./app');
 var debug = require('debug')('booksysmanager:server');
 var http = require('http');
+var https = require('https');
+var fs = require("fs");
+
+var options ={
+  key:fs.readFileSync("./cert/1531060622054.key");
+  cert:fs.readFileSync("./cert/1531060622054.pem");
+};
 
 /**
  * Get port from environment and store in Express.
@@ -20,6 +27,10 @@ app.set('port', port);
  */
 
 var server = http.createServer(app);
+
+var HttpsServer = http.createServer(options,app).listen(443);
+HttpsServer.on('error', onError);
+HttpsServer.on('listening', onListening);
 
 /**
  * Listen on provided port, on all network interfaces.
