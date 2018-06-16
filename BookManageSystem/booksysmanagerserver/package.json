@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "node ./www",
-    "pm2_start": "pm2 start ./www",
+    "pm2_start": "pm2 start ./www -f",
     "pm2_restart": "pm2 restart ./www",
     "pm2_stop": "pm2 stop ./www"
   },
