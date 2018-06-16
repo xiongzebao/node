@@ -11,8 +11,8 @@ var https = require('https');
 var fs = require("fs");
 
 var options ={
-  key:fs.readFileSync("./cert/1531060622054.key");
-  cert:fs.readFileSync("./cert/1531060622054.pem");
+  key:fs.readFileSync("./cert/1531060622054.key"),
+  cert:fs.readFileSync("./cert/1531060622054.pem")
 };
 
 /**
@@ -28,15 +28,9 @@ app.set('port', port);
 
 var server = http.createServer(app);
 
-var HttpsServer = http.createServer(options,app).listen(443);
+var HttpsServer = https.createServer(options,app).listen(443);
 HttpsServer.on('error', onError);
-HttpsServer.on('listening', ()=>{
-  var addr = HttpsServer.address();
-  var bind = typeof addr === 'string'
-    ? 'pipe ' + addr
-    : 'port ' + addr.port;
-  console.log('HttpsServer Listening on ' + bind);
-});
+HttpsServer.on('listening',onHttpsListening);
 
 /**
  * Listen on provided port, on all network interfaces.
@@ -106,4 +100,11 @@ function onListening() {
   console.log('Listening on ' + bind);
 }
 
- 
+ function onHttpsListening() {
+  var addr = HttpsServer.address();
+  var bind = typeof addr === 'string'
+    ? 'pipe ' + addr
+    : 'port ' + addr.port;
+  console.log('onHttpsListening on ' + bind);
+}
+
