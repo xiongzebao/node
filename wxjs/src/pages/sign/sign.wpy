@@ -17,9 +17,13 @@
 </style>
 <template>
   <view class="container">
-     <button class="confirm"  bindtap="onConfirm"> 签到</button>
-     <button wx:if="{{canIUse}}" open-type="getUserInfo" bindgetuserinfo="bindGetUserInfo">授权登录</button>
-  <view wx:else>请升级微信版本</view>
+  <button class="confirm"  bindtap="onConfirm"> 签到</button>
+
+
+
+  
+
+
   <text>{{tip}} <text bindtap="onConfirm">去补签</text></text>
  <text>{{couragementTip}}</text>
   </view>
@@ -76,6 +80,7 @@ export default class Index extends  BasePage {
   }
 
   bindGetUserInfo(e) {
+    console.log(e);
    
   }
 

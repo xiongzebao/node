@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./www",
+    "start": "supervisor ./www",
+    "pm2hot": "pm2 start ./www -f --watch",
     "pm2_start": "pm2 start ./www -f",
     "pm2_restart": "pm2 restart ./www",
     "pm2_stop": "pm2 stop ./www"

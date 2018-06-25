@@ -54,6 +54,10 @@
   <text class ="tipText" space="ensp">{{text}}</text>
   <button class="confirm" loading="{{showLoading}}" bindtap="onConfirm">{{btnValue}}</button>
 
+  <button class="confirm" wx:if="{{canIUse}}" open-type="getUserInfo" bindgetuserinfo="bindGetUserInfo">授权登录</button>
+  <view wx:else>无法授权登录，请升级微信App版本</view>
+ 
+
 </view>
 </template>
 
@@ -92,7 +96,8 @@ export default class CompleteUserInfo extends  BasePage {
     nickName:"",//昵称
     dateValue:"",//生日
     nickValidity:false,//昵称是否有效
-  
+    canIUse: wx.canIUse('button.open-type.getUserInfo'),
+    showLogin:true,
   /*  genderIndex:0,
     genderArray: ['男', '女'],
 */
@@ -134,6 +139,8 @@ export default class CompleteUserInfo extends  BasePage {
     }
     if (this.dateValue.length === 0) {
       this.dateTip = "请选择生日"
+       InterfaceUtils.showToast("请选择生日");
+      return;
     }
     this.showLoading = true;
     this.btnValue = "正在加载";
@@ -144,9 +151,14 @@ export default class CompleteUserInfo extends  BasePage {
 
     console.log("openid")
     console.log(wx.getStorageSync("openid"))
+    let openid = wx.getStorageSync("openid");
+    if(openid == "undefined"||openid == ""){
+      wx.showToast("请授权登录");
+      this.showLogin = true;
+      return;
+    }
+
     data.userId =  wx.getStorageSync("openid");
-
-
     let option = {
       data:data,
       url: api.ApiComInfo,

@@ -57,8 +57,7 @@ router.route('/login').post(function(req, res, next) {
 	//返回用户唯一标识和sessionkey
 	function callback(error, response, data) {
 		if (!error && response.statusCode == 200) {
-			//console.log(JSON.stringify(response))
-			//console.log(JSON.stringify(data))
+			console.log(JSON.stringify(data))
 			userDao.isUserExsit({
 					userId: `'${data.openid}'`
 				})
@@ -70,22 +69,15 @@ router.route('/login').post(function(req, res, next) {
 						});
 						resUtils.sendData(res, resolveData);
 					} else {
-						//console.log("yonghu yicunza")
-						//console.log(data)
+						//如果用户存在
 						userDao.queryUserInfo({
-								userId: `'${response.body.openid}'`
+								userId:`'${response.body.openid}'`
 							}).then((data) => {
-								//console.log("maibide---------")
-								//console.log(JSON.stringify(data))
-									resUtils.sendData(res, Resolve.success({fullUserInfo:data.data}));
-
+								resUtils.sendData(res, Resolve.success({fullUserInfo:data.data}));
 							})
 							.catch(next)
-
 					}
 				}).catch(next)
-
-
 		}
 	}
 	request(options, callback);

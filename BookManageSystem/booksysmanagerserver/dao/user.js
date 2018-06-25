@@ -35,24 +35,10 @@ class UserDao {
 		})
 	  }
 
-
-/*		isUserIdExsit(object) {
-		return new Promise((resolve, reject) => {
-			let sql = `select * from user where userId = '${object.userId}'`
-			db.query(sql) 
-				.then((data) => {
-					let result = data && data.length > 0 ? Resolve.fail("用户ID已存在") : Resolve.success("用户ID不存在");
-					resolve(result)
-				}).catch((e) => {
-					reject(e);
-				})
-		})
-	}*/
-
 	isUserExsit(object) {
 		return new Promise((resolve, reject) => {
-			let sql = `select *from user where nickName = '${object.nickName}' or userId =${object.userId}`
-			//console.log(sql)
+			let sql = `select *from user where nickName = '${object.nickName}' or userId = ${object.userId}`
+			console.log(sql)
 			db.query(sql)
 				.then((data) => {
 					let result = data && data.length > 0 ? Resolve.fail("用户已存在") : Resolve.success("用户不存在");
@@ -66,8 +52,6 @@ class UserDao {
 	}
 
 	async completeInfo(object) {
-		//console.log(` 完善信息:`)
-		//console.log(JSON.stringify(object));
 		if (utils.isEmpty(object) || !utils.contains(object, "nickName,birthDate,userId")) {
 			return 	  Promise.reject("参数异常");
 		}
@@ -77,10 +61,23 @@ class UserDao {
 				return Promise.resolve(Resolve.fail("用户已存在"));
 			}
 			object.dateTime = dayjs().format("YYYY-MM-DD hh:mm:ss");
+			var reg = new RegExp("'","g");  
+    		object.userId = object.userId.replace(reg, "");  
 		  await	 db.insert("user", object)
 		  return Promise.resolve(Resolve.success({fullUserIfo:object})) 
 		}catch (e){
 			return Promise.reject(e);
+		}
+	}
+
+	async getAllUserInfo(){
+		let sql = `select * from user`
+		 let data = await db.query(sql);
+		 
+		if(data.length>0){
+			return Promise.resolve(Resolve.success({list:data}))
+		}else{
+			return Promise.resolve(Resolve.fail("没有用户数据"))	
 		}
 	}
 

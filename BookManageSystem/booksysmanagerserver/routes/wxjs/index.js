@@ -10,13 +10,22 @@ wxjs 项目路由入口就两个一个是需要授权的，一个是公开的
 var authRouter  =require('./auth.js')
 var publicRouter = require('./public.js')
 
+router.use((req,res,next)=>{
+
+	  //统一往body中加用户id
+    let t= {};
+    Object.assign(t,req.body);
+    req.body =  t;
+    req.body.userId =`'${req.get("userId")}'`
+    //console.log("-----------")
+    console.log(req.body);
+	next();
+})
+
+
 router.use('/auth',authRouter)
 router.use('/public',publicRouter)
 
-router.use((req,res,next)=>{
-	//console.log("roototootototototo")
-	next();
-})
 
  
 module.exports = router;

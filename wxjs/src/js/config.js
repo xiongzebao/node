@@ -1,6 +1,7 @@
 export default {
 	server: {
 		host: "http://xiongbin.nat300.top"
+		//host: "http://www.xiongbin.top:4000"
 	},
 	color: {
 		app: {

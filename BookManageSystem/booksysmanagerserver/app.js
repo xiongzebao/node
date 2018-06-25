@@ -62,9 +62,9 @@ app.use(session({
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
-  //console.log("9999")
-  req.body.userId = req.get("userId");
-  /*var err = new Error('Not Found');
+/*  console.log("catch 404 and forward to error handler")
+  //req.body.userId = req.get("userId");
+  var err = new Error('Not Found');
   err.status = 404;
   res.status(err.status || 500);
   res.json({
