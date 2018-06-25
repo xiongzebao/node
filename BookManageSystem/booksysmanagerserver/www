@@ -19,7 +19,7 @@ var options ={
  * Get port from environment and store in Express.
  */
 
-var port = normalizePort(process.env.PORT || '80');
+var port = normalizePort(process.env.PORT || '4433');
 //app.set('port', port);
 
 /**
@@ -36,7 +36,7 @@ HttpsServer.on('listening',onHttpsListening);
  * Listen on provided port, on all network interfaces.
  */
 var server = http.createServer(app);
-server.listen(port);
+server.listen(4433);
 server.on('error', onError);
 server.on('listening', onListening);
 
