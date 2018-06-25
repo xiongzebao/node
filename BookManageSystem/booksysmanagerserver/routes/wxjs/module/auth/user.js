@@ -8,7 +8,7 @@ let {
 } = require(rootPath + "/model/CommenModel.js")
 let userDao = require(rootPath + "/dao/user.js")
 let utils = require(rootPath + "/public/javascripts/utils")
-let resUtils = require(rootPath + "/public/javascripts/resUtils")
+let resUtils = require(rootPath + "/public/javascripts/ResUtils")
 
 
 let CONSTANT = require(rootPath + "/public/javascripts/constant")
