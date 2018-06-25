@@ -53,7 +53,9 @@ app.use(session({
 }))
 
  app.get('/', function(req, res) {
-    res.send(JSON.stringify(req));
+    let str = {"baseUrl":req.baseUrl,
+     "protocol":req.protocol}
+    res.send(JSON.stringify(str));
    });
 //业务相关
 
@@ -77,14 +79,14 @@ app.use(function(req, res, next) {
 // error handler
 app.use(function(err, req, res, next) {
     if(err instanceof Resolve){
-      //console.log("---system error----")
+      console.log("---system error----")
       resUtils.sendData(res,err);
       return;
     }
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
   res.status(err.status || 500);
-  //console.log(err||err.stack);
+  console.log(err||err.stack);
   let errmsg = err.stack||err;
   errorLogger.insert(errmsg,err.status,2)
     resUtils.sendError(res,errmsg);
