@@ -53,7 +53,7 @@ app.use(session({
 }))
 
  app.get('/', function(req, res) {
-    res.send('JWT 授权访问的API路径 http://localhost:'   + '/api');
+    res.send(JSON.stringify(req));
    });
 //业务相关
 
