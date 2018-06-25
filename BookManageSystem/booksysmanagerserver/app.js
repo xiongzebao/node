@@ -53,7 +53,9 @@ app.use(session({
 }))
 
  app.get('/', function(req, res) {
-    let str = {"baseUrl":req.baseUrl,
+    let str = {
+      "originalUrl":req.originalUrl,
+      "baseUrl":req.baseUrl,
      "protocol":req.protocol}
     res.send(JSON.stringify(str));
    });
