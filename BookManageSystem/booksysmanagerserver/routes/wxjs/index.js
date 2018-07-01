@@ -16,8 +16,11 @@ router.use((req,res,next)=>{
     let t= {};
     Object.assign(t,req.body);
     req.body =  t;
-    req.body.userId =`'${req.get("userId")}'`
-    //console.log("-----------")
+
+    if(req.body.userId!=null&&req.body.userId!="undefined"){
+    	req.body.userId = `'${req.body.userId}'`
+    }
+ 
     console.log(req.body);
 	next();
 })

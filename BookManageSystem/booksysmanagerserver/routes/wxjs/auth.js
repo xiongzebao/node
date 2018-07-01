@@ -11,6 +11,12 @@ var userRouter =  require("./module/auth/user.js");
 
 
 apiRoutes.use(function(req, res, next) {
+        let t= {};
+    Object.assign(t,req.body);
+    req.body =  t;
+    req.body.userId =`'${req.get("userId")}'`
+    console.log("-----req.body------")
+    console.log(req.body);
   
     next();
   /*  //检查post的信息或者url查询参数或者头信息

@@ -34,7 +34,7 @@ class SignDao {
 	}
 
 	//查询用户所有签到信息
-    // queryFlag:1查询所有，2，查询最近n天,3,查询当月签到
+    // queryFlag:1查询所有，2，查询最近n天,3,按月份查询格式必须是类似2018-06格式
   async	getSignInfo(object) {
   			//console.log(object)
 			if (!utils.contains(object, "userId,queryFlag")) {
@@ -66,12 +66,12 @@ class SignDao {
 	}
 
 	async queryByMonth(object){
-			if (!utils.contains(object, "month")) {
+			if (!utils.contains(object, "yearmonth")) {
 					throw new Error("invalid param")
 				}
 				let sql = `select DATE_FORMAT(signTime,'%Y-%m-%d') as signTime,signState,signComment 
 					 from sign 
-					where  userId  = ${object.userId} and date_format(signTime,'%Y-%m')='${object.month}'`
+					where  userId  = ${object.userId} and date_format(signTime,'%Y-%m')='${object.yearmonth}'`
 				//console.log(sql)
 				let data = await db.query(sql)
 				return data;

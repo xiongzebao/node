@@ -42,6 +42,9 @@ let utils = {
  		if(typeof(object)=="number"){
 			return false;
 		}
+		if(typeof(object)=="boolean"){
+			return false;
+		}
  		
 		 //console.log(typeof(object))
 

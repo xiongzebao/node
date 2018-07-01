@@ -10,14 +10,15 @@ class DBOperation {
 		this.conn = connection;
 	}
 	//查询函数
+	/*
+	table:表名
+	values：参数对象
+	*/
 	queryByParam(table, values) {
 		return new Promise((resolve, reject) => {
-
-			//console.log("dfdfdsfdfdfsdffs")
+		 
+		 
 			let condition = this.formatCondition("and", values);
-			//console.log("00000000000000000000000000")
-			//console.log(values);
-
 			let queryResult = (error, results, fields) => {
 				if (error) {
 					reject(error);
@@ -55,6 +56,16 @@ class DBOperation {
 	//增添函数
 	insert(table, param) {
 		return new Promise((resolve, reject) => {
+			if(param.userId!="undefined"){
+
+				var reg = new RegExp("'","g");
+				var a = param.userId.replace(reg,"");
+ 				param.userId=a;
+			 
+			  console.log(  a); 
+			}
+
+
 			conn.query('INSERT INTO ' + table + ' SET ?', param, (error, results, fields) => {
 				if (error) {
 					reject(error);

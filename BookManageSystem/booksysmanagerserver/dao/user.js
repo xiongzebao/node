@@ -52,6 +52,8 @@ class UserDao {
 	}
 
 	async completeInfo(object) {
+		console.log("completeInfo")
+		console.log(object)
 		if (utils.isEmpty(object) || !utils.contains(object, "nickName,birthDate,userId")) {
 			return 	  Promise.reject("参数异常");
 		}

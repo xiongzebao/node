@@ -15,17 +15,8 @@ var options ={
   cert:fs.readFileSync("./cert/1531060622054.pem")
 };
 
-/**
- * Get port from environment and store in Express.
- */
-
-var port = normalizePort(process.env.PORT || '4000');
+var port = normalizePort(process.env.PORT ||'4000');
 //app.set('port', port);
-
-/**
- * Create HTTP server.
- */
-
 
 
 var HttpsServer = https.createServer(options,app).listen(443);

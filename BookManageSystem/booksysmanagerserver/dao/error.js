@@ -28,6 +28,12 @@ class ErrorLog{
 		return db.insert("error", object);
 	}
 
+	async query(table,values){
+
+	   let data=  await	queryByParam(table, values);
+	   return Promise.resolve(data);
+	}
+
 
 }
 
