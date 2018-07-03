@@ -1,14 +1,13 @@
-export default {
+let appConfig= {
 	server: {
 		host: "http://xiongbin.nat300.top"
 		//host: "http://www.xiongbin.top:4000"
 	},
-	color: {
-		app: {
+	appColor: {
 			pageColor: "#f7f6f7", //所有页面默认背景颜色
 			textColor: "#333333", //默认文字颜色
-			selTextColor: "#ff2738", //选中状态的文字颜色
-		}
-
+			selTextColor: "#26a2ff", //选中状态的文字颜色
 	}
 };
+
+export default appConfig

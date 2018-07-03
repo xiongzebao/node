@@ -57,15 +57,10 @@ class DBOperation {
 	insert(table, param) {
 		return new Promise((resolve, reject) => {
 			if(param.userId!="undefined"){
-
 				var reg = new RegExp("'","g");
 				var a = param.userId.replace(reg,"");
  				param.userId=a;
-			 
-			  console.log(  a); 
 			}
-
-
 			conn.query('INSERT INTO ' + table + ' SET ?', param, (error, results, fields) => {
 				if (error) {
 					reject(error);

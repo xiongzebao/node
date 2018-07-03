@@ -36,5 +36,11 @@ export const getAllUserInfo = () => {
   })
 }
 
+export const getErrorInfo = () => {
+  return axios.request({
+    url: '/wxjs/public/error/get_error_info',
+    method: 'post'
+  })
+}
 
 

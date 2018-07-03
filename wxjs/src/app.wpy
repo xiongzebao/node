@@ -1,4 +1,5 @@
 <style lang="less">
+@import "../weui.wxss";
 .container {
   height: 100%;
   display: flex;
@@ -15,7 +16,6 @@
 <script>
 import wepy from 'wepy'
 import 'wepy-async-function'
-
 import { setStore } from 'wepy-redux'
 import configStore from './store'
 import  appConfig from './js/config.js'
@@ -24,7 +24,8 @@ import  request from './js/NetUtils.js'
 import api from './js/url.js'
 const store = configStore()
 setStore(store)
-
+console.log("appConfig")
+console.log(appConfig)   
 export default class extends wepy.app {
     config = {
       pages: [
@@ -32,11 +33,13 @@ export default class extends wepy.app {
         'pages/sign/submit',
         "pages/stat/stat",
         "pages/index/completeUserInfo",
-
+        "pages/commen/video",
+        "pages/index/readMe"
       ],
       "tabBar": {
         color: "#333333",
-        selectedColor: "#ff0000",
+       // selectedColor: this.getAppConfig.appColor.selTextColor,
+        selectedColor: "#26a2ff",
         backgroundColor: "#f6f6f6",
         "list": [{
           "pagePath": "pages/sign/sign",
@@ -68,8 +71,9 @@ export default class extends wepy.app {
       appConfig: appConfig,
     }
 
-    compute = {
+    computed = {
       getAppConfig() {
+        console.log(appConfig);
         return appConfig;
       }
     }
@@ -88,20 +92,35 @@ export default class extends wepy.app {
     }
 
     onLoad() {
-      let that = this;
+      console.log("fsfsdgfgdfg")
+      //let that = this;
+    /*  let userId =  wx.getStorageSync("userId")
+      if(userId=="undefined"||userId==""){
+           wx.navigateTo({
+        url:  './pages/index/completeUserInfo'
+      })
+      }*/
+      this.login();
+    }
 
-      wx.login({
+    login(){
+       wx.login({
         success: function(res) {
           let param = {
             code: res.code
           }
+          //用户没有完善信息，会被拦截并将userid保存在本地，并且跳转到完善信息用户界面
+
           request.post(api.ApiLogin, param)
             .then((data) => {
+                console.log("------------logingggg---------")
+                console.log(data)
               try {
                 if (data.datas.userId) {
-                  wx.setStorageSync("userId", data.datas.userId)
+                   wx.setStorageSync("userId", data.datas.userId)
                 } else {
                   wx.setStorageSync("userId", data.datas.fullUserInfo.userId)
+                   wx.setStorageSync("fullUserInfo", data.datas.fullUserInfo)
                 }
               } catch (e) {
                 console.log(e);
@@ -117,26 +136,7 @@ export default class extends wepy.app {
 
 
     //获取获取微信的userInfo
-    getUserInfo(cb) {
-      const that = this
-      if (this.globalData.userInfo) {
-        cb && cb(this.globalData.userInfo)
-        return;
-      }
-      // 查看是否授权
-      wx.getSetting({
-        success: function(res) {
-          if (res.authSetting['scope.userInfo']) {
-            wx.getUserInfo({
-              success(res) {
-                that.globalData.userInfo = res.userInfo
-                cb && cb(res.userInfo)
-              }
-            })
-          }
-        }
-      })
-    }
+
 
     onError(e) {
       console.log("发生错误");

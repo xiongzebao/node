@@ -30,11 +30,8 @@ router.route('/index').post(function(req, res, next) {
 //用户注册路由
 router.route('/completeinfo').post(function(req, res, next) {
 	let t = !utils.isEmpty(req.body) ? req.body : req.query;
-	 
 	userDao.completeInfo(t)
 		.then((data) => {
-			//console.log("00000000")
-			//console.log(JSON.stringify(data))
 			resUtils.sendData(res, data);
 		}).catch(next)
 });

@@ -1,0 +1,121 @@
+<style lang="less">
+.video-section{
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 250rpx;
+}
+.btn-area{
+  width:100%;
+  display: none;
+}
+#myVideo{
+  width: 100%;
+}
+</style>
+<template>
+  <view class="container">
+   <view class="video-section">
+  <video id="myVideo" src="http://xiongbin.nat300.top/video/video.mp4" danmu-list="{{danmuList}}" enable-danmu danmu-btn controls autoplay></video>
+  <view class="btn-area">
+    <input bindblur="bindInputBlur"/>
+    <button bindtap="bindSendDanmu">发送弹幕</button>
+  </view>
+</view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+import BasePage from '../BasePage'
+import appConfig from '@/js/config.js'
+ 
+ 
+export default class xx extends  BasePage {
+    config = {
+      navigationBarTitleText: 'test'
+    }
+    components = {
+ 
+    }
+
+    computed={
+      videoUrl:function(){
+       // http://xiongbin.nat300.top/video/video.mp4
+        let url= appConfig.server.host+" /video/video.mp4";
+        console.log(url);
+        return url;
+      }
+    }
+   
+
+    data = {
+         danmuList: [
+      {
+        text: '第 1s 出现的弹幕',
+        color: '#ff0000',
+        time: 1
+      },
+      {
+        text: '第 3s 出现的弹幕',
+        color: '#ff00ff',
+        time: 3
+    }]
+    
+    }
+
+    computed = {
+      now () {
+        return +new Date()
+      }
+    }
+
+    methods = {
+    
+    }
+
+    events = {
+    
+    }
+
+    onLoad() {
+     this.videoContext = wx.createVideoContext('myVideo')
+    
+    }
+
+      getRandomColor () {
+  let rgb = []
+  for (let i = 0 ; i < 3; ++i){
+    let color = Math.floor(Math.random() * 256).toString(16)
+    color = color.length == 1 ? '0' + color : color
+    rgb.push(color)
+  }
+  return '#' + rgb.join('')
+}
+
+  bindInputBlur(e) {
+    this.inputValue = e.detail.value
+  }
+  bindButtonTap() {
+    var that = this
+    wx.chooseVideo({
+      sourceType: ['album', 'camera'],
+      maxDuration: 60,
+      camera: ['front','back'],
+      success: function(res) {
+        that.setData({
+          src: res.tempFilePath
+        })
+      }
+    })
+  }
+  bindSendDanmu () {
+    this.videoContext.sendDanmu({
+      text: this.inputValue,
+      color: this.getRandomColor()
+    })
+  }
+
+  }
+</script>

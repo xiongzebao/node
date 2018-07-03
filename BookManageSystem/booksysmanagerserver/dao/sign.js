@@ -18,14 +18,15 @@ class SignDao {
 		if (!utils.contains(object, `nickName,isResign`)) {
 			return Promise.reject("参数错误");
 		}
+ 
 		//查询是否有今天的记录
-		let sql = `select * from sign where  userId=${object.userId} and to_days(signTime) = to_days(now())`
+		let sql = `select * from sign where  userId=${object.userId} and to_days(signDate) = to_days('${object.signDate}')`
 		let data = await db.query(sql)
 		if (data && data.length > 0) {
 			return Resolve.fail("您今天已签到");
 		}
 		let currentTime = dayjs().format("YYYY-MM-DD HH:mm:ss");
-		object.signTime = currentTime;
+		object.createOn = currentTime;
 		let insertResult = await db.insert("sign", object)
 		if (insertResult.affectedRows > 0) {
 			return Resolve.success("签到成功");
@@ -42,7 +43,7 @@ class SignDao {
 			}
 			//查询所有 
 			if (object.queryFlag == 1) {
-				let sql = `select DATE_FORMAT(signTime,'%Y-%m-%d') as signTime,signState,signComment from sign where  userId  = ${object.userId}`
+				let sql = `select DATE_FORMAT(signDate,'%Y-%m-%d') as signDate,signState,signComment from sign where  userId  = ${object.userId}`
 				let data = await db.query(sql)
 				return data;
 			}
@@ -69,9 +70,9 @@ class SignDao {
 			if (!utils.contains(object, "yearmonth")) {
 					throw new Error("invalid param")
 				}
-				let sql = `select DATE_FORMAT(signTime,'%Y-%m-%d') as signTime,signState,signComment 
+				let sql = `select DATE_FORMAT(signDate,'%Y-%m-%d') as signDate,signState,signComment 
 					 from sign 
-					where  userId  = ${object.userId} and date_format(signTime,'%Y-%m')='${object.yearmonth}'`
+					where  userId  = ${object.userId} and date_format(signDate,'%Y-%m')='${object.yearmonth}'`
 				//console.log(sql)
 				let data = await db.query(sql)
 				return data;
@@ -86,8 +87,9 @@ class SignDao {
 			let userinfo = await userDao.queryUserInfo({
 				userId: object.userId
 			});
-			let sql = `SELECT DATE_FORMAT(signTime,'%Y-%m-%d') as signTime ,signComment FROM sign WHERE userId=${object.userId} and DATE_SUB(curdate(), INTERVAL ${object.lastDays} DAY) <= DATE(signTime) and DATE(signTime) >= DATE('${userinfo.data.dateTime}')`;
+			let sql = `SELECT DATE_FORMAT(signDate,'%Y-%m-%d') as signDate ,signComment FROM sign WHERE userId=${object.userId} and DATE_SUB(curdate(), INTERVAL ${object.lastDays} DAY) <= DATE(signDate) and DATE(signDate) >= DATE('${userinfo.data.dateTime}')`;
 			let data = await db.query(sql)
+			console.log(data)
 			return Promise.resolve(data)
 		} catch (e) {
 			return Promise.reject(e)

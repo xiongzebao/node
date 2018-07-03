@@ -4,19 +4,53 @@
   justify-content: center;
   align-items: center;
 }
-  .section{
-    width: 95%;
-    height: 300rpx;
-    border: 1rpx solid red;
-  }
+.section{
+
+}
+
+.confirm{
+  width: 80%;
+  margin-top: 30rpx;
+  background: #26a2ff;
+  color: white;
+  font-size: 30rpx;
+}
+.phclass{
+  font-size: 25rpx;
+}
+.note-input{
+  padding: 10rpx;
+  width: 90%;
+  height: 300rpx;
+  border: 1rpx solid #b1b1b1;
+  font-size: 25rpx;
+}
+.radio{
+  margin-left: 20rpx;
+  font-size: 30rpx;
+}
+
+.radio-container{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 20rpx;
+}
 </style>
 <template>
   <view class="container">
-   <view class="section">
-    <textarea  bindinput="onInput" placeholder="请输入说明" value="{{signComment}}" />
+    <textarea class="note-input" bindinput="onInput" placeholder="请输入签到笔记,记录每一天的成长..." maxlength="50" placeholder-class="phclass"auto-focus value="{{signComment}}" />
+
+    <view class="radio-container">
+      <text style="font-size:30rpx;">是否完成  :</text>
+      <radio-group class="radio-group" bindchange="radioChange">
+        <label class="radio" wx:key="item.name" wx:for="{{items}}">
+          <radio   value="{{item.name}}" color="#26a2ff"/>{{item.value}}
+        </label>
+      </radio-group>
+    </view>
+    <button class="confirm"  bindtap="onConfirm"> {{btn}}</button>
   </view>
-  <button class="confirm"  bindtap="onConfirm"> 签到</button>
-</view>
 </template>
 
 <script>
@@ -24,73 +58,79 @@
 import wepy from 'wepy'
 import dayjs from 'dayjs'
 import BasePage from '../BasePage'
-import  request from '../../js/NetUtils.js'
-import    api  from '../../js/url.js'
- import InterfaceUtils from '../../js/InterfaceUtils'
+import request from '../../js/NetUtils.js'
+import api  from '../../js/url.js'
+import InterfaceUtils from '../../js/InterfaceUtils'
 export default class Index extends  BasePage {
   config = {
     navigationBarTitleText: '签到'
   }
   components = {
-    
+
   }
 
+
   data = {
-    signComment:"祝你看看"
+    signComment:"",
+    signState:"",
+    isResign:"",
+    signDate:"",
+    items: [
+    {name: '1', value: '完成'},
+    {name: '2', value: '未完成'},
+    ]
   }
 
   computed = {
-    
+   btn:()=>{
+    return  this.isResign==1?"补签":"签到"  
   }
+}
 
-  methods = {
-    onConfirm(){
-
- 
-     
-     // var signTime = new Date().format("yyyy-MM-dd hh:mm:ss");
-      let data = {
-        userId:"777",
-        nickName:"xiongbin",
-        signState:1,
+methods = {
+  radioChange(e) {
+    this.signState = e.detail.value;
+  },
+  onConfirm(){
+    if(this.signComment==""){
+       InterfaceUtils.showToast("笔记写点什么吧");
+       return;
+    }
+    if(this.signState==""){
+      InterfaceUtils.showToast("请选择完成情况");
+      return;
+    }
+    let userInfo = wx.getStorageSync("fullUserInfo");
+    console.log(userInfo)
+    let data = {
+      userId:userInfo.userId,
+      nickName:userInfo.nickName,
+        signState:this.signState,//是否完成
         signComment:this.signComment,
-        isResign:true
+        isResign:this.isResign,
+        signDate:this.signDate
       }
+
+
+      console.log(data);
       request.post(api.ApiSign,data)
       .then((data) => {
-        console.log(data)
         InterfaceUtils.showToast(data.message);
-   
+        wx.navigateBack({  delta: 1});
+  
       })
       .catch((e) => {
-         console.log(e)
-         InterfaceUtils.showToast(e.message);
-          
-      });
-
-  
+       InterfaceUtils.showToast(e.message);
+     });
     },
 
     onInput(e){
       this.signComment=e.detail.value;
     }
-   
+
   }
 
   events = {
-     onError(e){
-    console.log("onError submit")
-    console.log(e)
-    let data={
-      errorInfo:e,
-      errorType:1,
-      errorCode:500
-    }
-    request.post(api.ApiError,data)
-
-  }
-  }
-
    onError(e){
     console.log("onError submit")
     console.log(e)
@@ -102,13 +142,29 @@ export default class Index extends  BasePage {
     request.post(api.ApiError,data)
 
   }
+}
 
-
-  onLoad(){
-   
-       console.log("fdsfs")
- console.log(dayjs().format("YYYY-MM-DD HH:mm:ss"));
-  
+onError(e){
+  console.log("onError submit")
+  console.log(e)
+  let data={
+    errorInfo:e,
+    errorType:1,
+    errorCode:500
   }
+  request.post(api.ApiError,data)
+}
+
+onLoad(option){
+  console.log(option);
+  console.log(option.isResign)
+  console.log(option.signDate);
+  this.isResign = option.isResign;
+  if(this.isResign==1){
+    this.signDate = option.signDate;
+  }else{
+    this.signDate = dayjs().format("YYYY-MM-DD");
+  }
+}
 }
 </script>

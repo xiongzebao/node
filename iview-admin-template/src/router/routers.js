@@ -127,6 +127,40 @@ export default [
     ]
   },
   {
+    path: 'error-feedback',
+    name: 'error-feedback',
+    meta: {
+      icon: 'arrow-graph-up-right',
+      title: '错误与反馈'
+    },
+    component: Main,
+    children: [
+      {
+        path: 'error-feedback',
+        name: 'error-feedback',
+        component: parentView,
+        meta: {
+          access: ['super_admin', 'admin'],
+          icon: 'arrow-graph-up-right',
+          title: '错误信息'
+        },
+        component: () => import('@/view/error-feedback/error-feedback.vue')
+      },
+      {
+        path: 'error-feedback1',
+        name: 'error-feedback1',
+        meta: {
+          access: ['super_admin', 'admin'],
+          icon: 'arrow-graph-up-right',
+          title: '用户反馈'
+        },
+        component: () => import('@/view/error-feedback/error-feedback.vue')
+      }
+    ]
+ 
+  },
+
+  {
     path: '/401',
     name: 'error_401',
     component: () => import('@/view/error-page/401.vue')

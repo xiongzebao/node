@@ -1,52 +1,54 @@
 <style lang="less">
+.root{
+  width: 100%;
 
+}
+.comment{
+   color:#333333;
+   padding: 10rpx;
+   font-size: 25rpx;
+}
+.comment-container{
+  margin-top: 200rpx;
+  display: flex;
+  width: 100%;
+  background: #f8f8f8;
+  align-items: center;
+  justify-content: center;
+}
 </style>
 <template>
-
-   <wepyCanlendar  
-   :currentDate.sync="currentDate" 
-   :startDate.sync="startDate"
-    :endDate.sync="endDate"
-  :hasIconList.sync="hasIconList"
-   ></wepyCanlendar> 
-   <text>{{comment}}</text>
-
+<view class="root">
+ <wepyCanlendar  
+ :currentDate.sync="currentDate" 
+ :startDate.sync="startDate"
+ :endDate.sync="endDate"
+ :hasIconList.sync="hasIconList"
+ ></wepyCanlendar> 
+ <view class="comment-container"> <text class="comment">{{comment}}</text></view>
+</view>
 </template>
 
 <script>
-  import wepy from 'wepy'
-  import wepyCanlendar from '../../components/calendar'
-  import dayjs from 'dayjs'
-  import BasePage from '../BasePage'
-  import request from '../../js/NetUtils.js'
-  import api from '../../js/url.js'
-  import InterfaceUtils from '../../js/InterfaceUtils'
+import wepy from 'wepy'
+import wepyCanlendar from '../../components/calendar'
+import dayjs from 'dayjs'
+import BasePage from '../BasePage'
+import request from '../../js/NetUtils.js'
+import api from '../../js/url.js'
+import InterfaceUtils from '../../js/InterfaceUtils'
 
-  export default class Stat extends BasePage {
-    components = {
-      wepyCanlendar
-    }
-    computed = {
+export default class Stat extends BasePage {
+  components = {
+    wepyCanlendar
+  }
+  computed = {
 
-    }
-    onLoad() {
-
-      let that = this;
-
+  }
+  onLoad() {
+    let that = this;
       //请求当月的签到信息
-      request.post(api.ApiSignQuery,{queryFlag:1})
-        .then((data) => {
-          that.days = data.datas.list;
-          that.days.forEach((item) => {
-            let t = {
-              index: dayjs(item.signTime).date(),//选中标记的日期（如2018-06-09）
-              status: item.signState,//status目前就两种状态，一种是选中的绿色对勾（值为1），一种是红色的叉叉（值为2）
-            }
-            that.hasIconList.push(t)
-            that.$apply();
-          })
-           that.$broadcast("startRenderCalendar"); //通知日历组件可以开始渲染 
-        })
+      this.reqSignInfo(dayjs().format("YYYY-MM"));
     }
     data = {
       currentDate: dayjs().format("YYYY-MM-DD"),
@@ -57,15 +59,38 @@
       comment: ""
     } // 页面所需数据均需在这里声明，可用于模板数据绑定
 
-    events = {
+    reqSignInfo(yearmonth){
+     let that = this;
+     console.log(yearmonth);
+     request.post(api.ApiSignQuery,{queryFlag:3,yearmonth:yearmonth})
+     .then((data) => {
+      that.days = data.datas.list;
+      console.log(that.days)
+       
+      that.days.forEach((item) => {
+        let t = {
+              index: dayjs(item.signDate).date(),//选中标记的日期（如2018-06-09）
+              status: item.signState,//status目前就两种状态，一种是选中的绿色对勾（值为1），一种是红色的叉叉（值为2）
+            }
+            that.hasIconList.push(t)
+            that.$apply();
+          })
+           that.$broadcast("startRenderCalendar"); //通知日历组件可以开始渲染 
+         })
+   }
+
+   events = {
 
       //日历当前时间改变回调
       calChangeCurrentDate: function(date, e) {
-        console.log(date);
-
+        console.log("changekkkkk")
+        this.hasIconList=[];
+        this.reqSignInfo(date);
       },
+
       //选择那一天回调
       calChangeSelectedDay: function(date, e) {
+         
         for (let i = 0; i < this.days.length; i++) {
           if (this.days[i].signTime == date) {
             console.log(this.days[i].signComment)
@@ -73,8 +98,36 @@
             return;
           }
         }
-        this.comment = `您${date}没有签到`
-      }
+        
+        /*  let t= dayjs(date).isAfter( dayjs(this.getDay(-3)))//是否在最近三天内
+          if(t&&true){
+            wx.navigateTo({
+            url:  '../sign/submit?isResign=1&signDate='+date
+          })
+         }*/
+         this.comment = `您${date}没有签到`
+       }
+     }
+
+     getDay(day){  
+       var today = new Date();  
+       var targetday_milliseconds=today.getTime() + 1000*60*60*24*day;          
+       today.setTime(targetday_milliseconds); //注意，这行是关键代码
+       var tYear = today.getFullYear();  
+       var tMonth = today.getMonth();  
+       var tDate = today.getDate();  
+       tMonth = this.doHandleMonth(tMonth + 1);  
+       tDate = this.doHandleMonth(tDate);  
+       return tYear+"-"+tMonth+"-"+tDate;  
+     }  
+     doHandleMonth(month){  
+       var m = month;  
+       if(month.toString().length == 1){  
+        m = "0" + month;  
+      }  
+      return m;  
     }
+
+
   }
-</script>
+  </script>

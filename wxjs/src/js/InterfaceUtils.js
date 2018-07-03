@@ -1,5 +1,8 @@
 
-var utils = require("./utils")
+//import utils from "./utils"
+
+//let utils=require("@/js/utils.js")
+
 
 class InterfaceUtils {
 
@@ -29,12 +32,12 @@ class InterfaceUtils {
 
 	showToast(param) {
 	
-		if(utils.isEmpty(param)){
+	/*	if(utils.isEmpty(param)){
 			return;
 		}
 		if(typeof(param) === "object"&&utils.isEmpty(param.title)){
 			return;
-		}
+		}*/
 		let defaultOption = {
 			title: '',
 			icon: 'none',

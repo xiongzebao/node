@@ -123,7 +123,7 @@
         })
       }
       
-      this.$emit('calChangeSelectedDay', this.current.year + "-" + this.setMonthDouble(this.current.month)+"-"+parseInt(index+1), e);
+      this.$emit('calChangeSelectedDay', this.current.year + "-" + this.setMonthDouble(this.current.month)+"-"+this.setMonthDouble(parseInt(index+1)), e);
     },
     // 递增、递减切换月份
     handleCalendar(type, e) {
@@ -148,7 +148,7 @@
       }
       this.current.year = newYear;
       this.current.month = newMonth;
-      this.drawCalendar()
+      //this.drawCalendar()
       this.$emit('calChangeCurrentDate', this.current.year + "-" + this.setMonthDouble(this.current.month), e);
     },
     // 点击年月调用picker选择器

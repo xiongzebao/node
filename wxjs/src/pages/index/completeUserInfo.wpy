@@ -4,7 +4,7 @@
 .root{
   display: flex;
   flex-direction: column;
-   align-items: center;
+  align-items: center;
 }
 .avatar {
   display: block;
@@ -35,16 +35,16 @@
 <template>
   <view class ="root">
    <image  class="avatar"   src="{{avatarUrl}}"></image>
-  <ComInput 
-  placeholder="请输入昵称"
-  :tipValue="nickTip"
-  :value.sync="nickName"
-  confirmType="done"
-  :validity="nickValidity"
-  maxlength="7"
-  icon="shouji"
-  type="text"/>
-  
+   <ComInput 
+   placeholder="请输入昵称"
+   :tipValue="nickTip"
+   :value.sync="nickName"
+   confirmType="done"
+   :validity="nickValidity"
+   maxlength="30"
+   icon="shouji"
+   type="text"/>
+
  <!--  <picker class="picker" bindchange="bindPickerChange" value="{{genderIndex}}" range="{{genderArray}}">
     <Show :value.sync="gender" placeholder="性别" tipValue=""></Show>
   </picker> -->
@@ -56,7 +56,7 @@
 
   <button class="confirm" wx:if="{{canIUse}}" open-type="getUserInfo" bindgetuserinfo="bindGetUserInfo">授权登录</button>
   <view wx:else>无法授权登录，请升级微信App版本</view>
- 
+
 
 </view>
 </template>
@@ -66,7 +66,7 @@
 import wepy from 'wepy'
 import dayjs from 'dayjs'
 import BasePage from '../BasePage'
- import InterfaceUtils from '../../js/InterfaceUtils'
+import InterfaceUtils from '../../js/InterfaceUtils'
 import Icon from '../../components/icon'
 import Input from '../../components/input'
 import ComInput from '../../components/com-input'
@@ -74,8 +74,13 @@ import Show from '../../components/show'
 import appMixin from '../../mixins/appMixins'
 
 import  request from '../../js/NetUtils.js'
-import    api  from '../../js/url.js'
+import    api  from '@/js/url.js'
+//import    utils  from '../../js/utils.js'
+//let utils=require("@/js/utils.js")
+//console.log(utils)
 
+import commenUtils  from '../../js/commenUtils'
+console.log(commenUtils)
 export default class CompleteUserInfo extends  BasePage {
 
   minxins=[appMixin]
@@ -88,7 +93,7 @@ export default class CompleteUserInfo extends  BasePage {
     ComInput:ComInput,
     ComInputA:ComInput,
     Show:Show,
-     ShowA:Show
+    ShowA:Show
   }
 
   data = {
@@ -100,8 +105,8 @@ export default class CompleteUserInfo extends  BasePage {
     showLogin:true,
   /*  genderIndex:0,
     genderArray: ['男', '女'],
-*/
-    userinfo:"",
+    */
+    userInfo:"",
     gender:"",
     maxlength:7,
     nickTip:"请输入正确的昵称",
@@ -109,7 +114,6 @@ export default class CompleteUserInfo extends  BasePage {
     showLoading:false,
     btnValue:"确     定",
     dateTip:""
-
   }
 
   computed = {
@@ -119,7 +123,7 @@ export default class CompleteUserInfo extends  BasePage {
 
   }
   watch = {
-  
+
   }
   methods = {
 
@@ -132,79 +136,75 @@ export default class CompleteUserInfo extends  BasePage {
   }
   onConfirm(){
 
-  
     if (this.nickName.length === 0) {
       InterfaceUtils.showToast("昵称不能为空");
       return;
     }
     if (this.dateValue.length === 0) {
       this.dateTip = "请选择生日"
-       InterfaceUtils.showToast("请选择生日");
+      InterfaceUtils.showToast("请选择生日");
       return;
     }
     this.showLoading = true;
     this.btnValue = "正在加载";
 
-    let data = this.userinfo;
-    data.nickName = this.nickName;
-    data.birthDate = this.dateValue;
-
-    console.log("openid")
-    console.log(wx.getStorageSync("openid"))
-    let openid = wx.getStorageSync("openid");
-    if(openid == "undefined"||openid == ""){
-      wx.showToast("请授权登录");
-      this.showLogin = true;
-      return;
-    }
-
-    data.userId =  wx.getStorageSync("openid");
-    let option = {
-      data:data,
-      url: api.ApiComInfo,
-      complete: () => {
-        this.showLoading = false;
-        this.btnValue = "确定";
-        this.$apply()
-      }
-    }
-
-    request.post(option)
-      .then((data) => {
-        InterfaceUtils.showToast(data.message);
-       console.log(data)
-       wx.setStorageSync("fullUserInfo",data.datas.fullUserInfo)
-       wx.navigateBack();
-      })
-      .catch((e) => {
-        console.log(e)
-        InterfaceUtils.showToast(e.message)
-       
-      });
-
-
-  }
-  onShow() {
-
-  }
-
-  events = {
-
-  }
-
-  onLoad(){
-    super.onLoad();
     let that = this
-   
-    this.$parent.getUserInfo((userinfo)=>{
-      console.log(userinfo);
-      that.nickName = userinfo.nickName;
-      that.avatarUrl = userinfo.avatarUrl;
-      that.userinfo = userinfo;
-      this.$apply();
-    })
-
-
+    if(this.userInfo==""){
+      commenUtils.getUserInfo((userinfo)=>{
+        that.userInfo = userinfo
+        that.$apply();
+        that.login();
+      })
+      return; 
+    }
+    this.login();
   }
+
+  login(){
+   let data = this.userInfo;
+   data.nickName = this.nickName;
+   data.birthDate = this.dateValue;
+   data.userId =  wx.getStorageSync("openid");
+   console.log(data);
+   let option = {
+    data:data,
+    url: api.ApiComInfo,
+    complete: () => {
+      this.showLoading = false;
+      this.btnValue = "确定";
+      this.$apply()
+    }
+  }
+
+  request.post(option)
+  .then((data) => {
+    InterfaceUtils.showToast(data.message);
+    console.log(data)
+    wx.setStorageSync("fullUserInfo",data.datas.fullUserInfo)
+    wx.navigateBack();
+  })
+  .catch((e) => {
+    console.log(e)
+    InterfaceUtils.showToast(e.message)
+
+  });
+}
+
+events = {
+
+}
+
+onLoad(){
+  super.onLoad();
+  let that = this
+  commenUtils.getUserInfo((userinfo)=>{
+   console.log("userinfo");
+   console.log(userinfo);
+   this.userInfo = userinfo
+   this.$apply();
+ })
+}
+
+
 }
 </script>
