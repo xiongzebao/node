@@ -1,7 +1,6 @@
 var mysql  = require('mysql');  //调用MySQL模块
 var config = require("../config.js")
 
-
 //创建一个connection
 var connection = mysql.createConnection({     
   host     : config.host,       //主机

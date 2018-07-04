@@ -11,6 +11,7 @@ class CONSTANT{
 	    	baseTip+= "经过大数据分析，培养一种习惯，一周是一个坎，坚持了这一周，你离成功更近了三分之一的距离，GoodLuck!";return baseTip;
 	    }
 
+	    return baseTip;
 
 	}
 }

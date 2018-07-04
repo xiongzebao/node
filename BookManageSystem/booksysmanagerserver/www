@@ -15,11 +15,11 @@ var options ={
   cert:fs.readFileSync("./cert/1531060622054.pem")
 };
 
-var port = normalizePort(process.env.PORT ||'4000');
+var port = normalizePort(process.env.PORT ||'3000');
 //app.set('port', port);
 
 
-var HttpsServer = https.createServer(options,app).listen(443);
+var HttpsServer = https.createServer(app).listen(4000);
 HttpsServer.on('error', onError);
 HttpsServer.on('listening',onHttpsListening);
 

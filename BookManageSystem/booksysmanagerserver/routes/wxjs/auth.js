@@ -17,7 +17,6 @@ apiRoutes.use(function(req, res, next) {
     req.body.userId =`'${req.get("userId")}'`
     console.log("-----req.body------")
     console.log(req.body);
-  
     next();
   /*  //检查post的信息或者url查询参数或者头信息
     var token = req.body.token || req.query.token || req.headers['x-access-token'];

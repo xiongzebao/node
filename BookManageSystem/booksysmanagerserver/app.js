@@ -37,7 +37,6 @@ var corsOptions = {
      } else {
        callback(new Error('Not   allowed  by CORS'))
      }*/
-
     callback(null, true)
   }
 }
@@ -93,6 +92,7 @@ app.use(function(err, req, res, next) {
   errorLogger.insert(errmsg,err.status,2)
     resUtils.sendError(res,errmsg);
 });
+
 
 //wxjs根路由
 var wxjsRootRouter = require('./routes/wxjs/index');
