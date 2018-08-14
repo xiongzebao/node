@@ -5,6 +5,6 @@ module.exports = {
     'database': 'mongodb://127.0.0.1',
     'host':'localhost',//主机域名
     'user':'root',//数据库连接用户名
-    'password':'xiongbin',//数据库连接密码 
+    'password':'root',//数据库连接密码 
     'port':'3306'//数据库连接端口号
 };

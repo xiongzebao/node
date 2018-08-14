@@ -47,7 +47,7 @@ export default {
              {
                 title: '错误码',
                 key: 'errorCode',
-                  width:80
+                width:80
             },
              {
                 title: '错误信息',

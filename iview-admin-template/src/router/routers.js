@@ -34,23 +34,34 @@ export default [
       }
     ]
   },
+
+
   {
-    path: '/components',
-    name: 'components',
+    path: '/info',
+    name: 'info',
     meta: {
       icon: 'social-buffer',
-      title: '组件'
+      title: '资讯管理'
     },
     component: Main,
     children: [
       {
-        path: 'count_to',
-        name: 'count_to',
+        path: 'look_info',
+        name: 'look_info',
         meta: {
           icon: 'arrow-graph-up-right',
-          title: '数字渐变'
+          title: '查看资讯'
         },
-        component: () => import('@/view/components/count-to/count-to.vue')
+        component: () => import('@/view/info/look-info.vue')
+      },
+      {
+        path: 'add_info',
+        name: 'add_info',
+        meta: {
+          icon: 'arrow-graph-up-right',
+          title: '新增资讯'
+        },
+        component: () => import('@/view/text-editor/text-editor.vue')
       }
     ]
   },

@@ -11,6 +11,8 @@ var userRouter =  require("./module/auth/user.js");
 
 
 apiRoutes.use(function(req, res, next) {
+
+    
         let t= {};
     Object.assign(t,req.body);
     req.body =  t;

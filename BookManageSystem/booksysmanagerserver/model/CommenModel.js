@@ -114,5 +114,20 @@ class Resolve {
 	
 }
 
+class Page{
+	constructor(){
+		this.curPage=1;
+		this.pageSize=1;
+		this.totalSize=1;
+		this.totalPage=1;
+		this.nextPage=false;
+		this.dataList="";
+	
+	}
+
+
+}
+
 exports.RespBaseData = RespBaseData;
 exports.Resolve = Resolve;
+exports.Page = Page;

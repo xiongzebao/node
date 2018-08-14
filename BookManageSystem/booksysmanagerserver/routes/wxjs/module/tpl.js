@@ -4,7 +4,7 @@ var router = express.Router();
  const rootPath = path.dirname(require.main.filename);;
 let {
 	RespBaseData,
-	Resovle
+	Resolve
 } = require(rootPath + "/model/CommenModel.js")
 let signDao = require(rootPath + "/dao/sign.js")
 let utils = require(rootPath + "/public/javascripts/utils")

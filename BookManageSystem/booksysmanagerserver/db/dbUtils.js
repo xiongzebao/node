@@ -17,7 +17,6 @@ class DBOperation {
 	queryByParam(table, values) {
 		return new Promise((resolve, reject) => {
 		 
-		 
 			let condition = this.formatCondition("and", values);
 			let queryResult = (error, results, fields) => {
 				if (error) {
@@ -32,6 +31,20 @@ class DBOperation {
 		})
 
 
+	}
+
+		async getTotalSize(table){
+		let sql = `select count(*) as count from ${table}`
+		let totalSize = await db.query(sql)
+		return totalSize[0].count;
+	}
+
+	async getTotalPage(table){
+		let totalSize = await this.getTotalSize(table);
+		console.log(totalSize);
+		let pageNumber =Math.ceil(totalSize/10) 
+		console.log("pageNumber=="+pageNumber); 
+		return pageNumber;
 	}
 
 	/*
@@ -56,11 +69,15 @@ class DBOperation {
 	//增添函数
 	insert(table, param) {
 		return new Promise((resolve, reject) => {
-			if(param.userId!="undefined"){
+
+			if(typeof(param.userId)!="undefined"){
 				var reg = new RegExp("'","g");
+				console.log(param.userId);
 				var a = param.userId.replace(reg,"");
  				param.userId=a;
 			}
+
+			console.log(param);
 			conn.query('INSERT INTO ' + table + ' SET ?', param, (error, results, fields) => {
 				if (error) {
 					reject(error);
