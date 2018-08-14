@@ -62,9 +62,14 @@ import request from '../../js/NetUtils.js'
 import api  from '../../js/url.js'
 import InterfaceUtils from '../../js/InterfaceUtils'
 export default class Index extends  BasePage {
-  config = {
-    navigationBarTitleText: '签到'
-  }
+   config = {
+      'navigationBarTitleText': '签到',
+      'navigationBarTextStyle': 'white',
+      'navigationBarBackgroundColor': '#26a2ff',
+      'disableScroll': false,
+      'enablePullDownRefresh': false,
+      'backgroundTextStyle': 'dark'
+    }
   components = {
 
   }
@@ -117,11 +122,12 @@ methods = {
       .then((data) => {
         InterfaceUtils.showToast(data.message);
         wx.navigateBack({  delta: 1});
-  
       })
       .catch((e) => {
        InterfaceUtils.showToast(e.message);
      });
+
+
     },
 
     onInput(e){

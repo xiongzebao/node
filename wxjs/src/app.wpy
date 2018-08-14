@@ -34,7 +34,10 @@ export default class extends wepy.app {
         "pages/stat/stat",
         "pages/index/completeUserInfo",
         "pages/commen/video",
-        "pages/index/readMe"
+        "pages/index/readMe",
+        "pages/info/info",
+        "pages/info/infoList2",
+         "pages/info/infoDetail"
       ],
       "tabBar": {
         color: "#333333",
@@ -44,13 +47,20 @@ export default class extends wepy.app {
         "list": [{
           "pagePath": "pages/sign/sign",
           "text": "签到",
-          "iconPath": "./asset/sign.png",
-          "selectedIconPath": "./asset/sign_sel.png"
-        }, {
+          "iconPath": "./asset/imgs/sign.png",
+          "selectedIconPath": "./asset/imgs/sign_sel.png"
+        },
+         {
+          "pagePath": "pages/info/infoList2",
+          "text": "资讯",
+          "iconPath": "./asset/imgs/stat.png",
+          "selectedIconPath": "./asset/imgs/stat_sel.png"
+        },
+         {
           "pagePath": "pages/stat/stat",
           "text": "统计",
-          "iconPath": "./asset/stat.png",
-          "selectedIconPath": "./asset/stat_sel.png"
+          "iconPath": "./asset/imgs/stat.png",
+          "selectedIconPath": "./asset/imgs/stat_sel.png"
         }]
       },
       window: {
@@ -92,7 +102,7 @@ export default class extends wepy.app {
     }
 
     onLoad() {
-      console.log("fsfsdgfgdfg")
+      
       //let that = this;
     /*  let userId =  wx.getStorageSync("userId")
       if(userId=="undefined"||userId==""){
@@ -140,7 +150,7 @@ export default class extends wepy.app {
 
     onError(e) {
       console.log("发生错误");
-      InterfaceUtils.showToast("错误错误操作失败");
+      InterfaceUtils.showToast("错误操作失败");
       let data = {
         errorInfo: e,
         errorType: 1,

@@ -6,7 +6,7 @@
       </view>
       <picker class="wepy-calendar-date" fields="month"  mode="date" value="{{pickerValue}}" start="{{startDate}}" end="{{endDate}}" bindchange="bindDateChange">
         <view class="picker">
-          {{current.year || "--"}} 年 {{current.month || "--"}} 月
+          {{ currentYear || "--"}} 年 {{ currentMonth || "--"}} 月
         </view>
       </picker>
       <view class="wepy-calendar-next" catchtap="handleCalendar('next')" >
@@ -102,6 +102,12 @@
                 let value=this.current.year+"-"+this.setMonthDouble(this.current.month);
                 return value;
             },
+            currentYear(){
+              return this.current.year;
+            },
+            currentMonth(){
+              return this.current.month;
+            }
           
         }  // 声明计算属性（详见后文介绍）
 
@@ -123,6 +129,7 @@
         })
       }
       
+       
       this.$emit('calChangeSelectedDay', this.current.year + "-" + this.setMonthDouble(this.current.month)+"-"+this.setMonthDouble(parseInt(index+1)), e);
     },
     // 递增、递减切换月份
@@ -264,6 +271,9 @@
   setCurrentData() { //设置当前年月
     this.current.year = new Date(this.currentDate).getFullYear();
     this.current.month = new Date(this.currentDate).getMonth() + 1;
+    console.log(this.currentDate);
+    console.log(this.current);
+    this.$apply();
   }
 
 }

@@ -1,0 +1,109 @@
+<style lang="less">
+/*.WxEmojiView.wxParse-inline{
+   font-size: 28rpx;
+}
+ */
+
+.wxParse-img{
+  border-radius: 10rpx;
+}
+ .wxParse-p{
+   font-size: 30rpx;
+   line-height: 50rpx;
+  padding: 20rpx;
+  width: 100%;
+  color: #333;
+ }
+ .title{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 34rpx;
+  font-weight: bold;
+ }
+ .root{
+  padding: 10rpx;
+ }
+</style>
+<template>
+   <view class="root">
+    <text class="title">{{title}}</text>
+    <htmlParser :parserName="name" :parserContent.sync="content"/>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+import BasePage from '../BasePage'
+import  request from '../../js/NetUtils.js'
+import   api  from '../../js/url.js'
+import htmlParser from '../../components/htmlParser'
+ 
+export default class Info extends  BasePage {
+
+  config = {
+      'navigationBarTitleText': '资讯详情',
+      'navigationBarTextStyle': 'white',
+      'navigationBarBackgroundColor': '#26a2ff',
+      'disableScroll': true,
+      'enablePullDownRefresh': false,
+      'backgroundTextStyle': 'dark'
+    }
+    components = {
+      htmlParser: htmlParser,
+ 
+    }
+        data = {
+            name:"article",
+            htmlParserTpl: {},
+            content:"",
+            title:""
+        };
+        events = {
+            'htmlParser-broadcast': ($event, ...args) => {
+            },
+        };
+        methods = {
+            htmlParserNotice(){
+                this.htmlParse();
+            }
+        };
+
+     
+        onDestroy(){
+          console.log("onDestroy")
+        }
+
+        onUnload (){
+       
+          this.title="";
+          this.content=""
+          this.$apply();
+          this.$invoke('htmlParser', 'htmlParserNotice')//very important
+        }
+
+        onLoad(option){
+          console.log("onLoad")
+          this.title="";
+          this.content=""
+
+          let that = this;
+
+          request.post(api.ApiInfoQueryDetail,option).then((data)=>{
+            console.log(data);
+            that.title = data.datas.obj.title;
+            that.content = data.datas.obj.content;
+            console.log(that.content)
+            that.$apply();
+               //调用通知接口通知组件更新数据
+            that.$invoke('htmlParser', 'htmlParserNotice')//very important
+          })
+        }
+
+        onDestroy(){
+
+        }
+
+
+  }
+</script>

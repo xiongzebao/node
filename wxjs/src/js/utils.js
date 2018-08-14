@@ -28,16 +28,19 @@ Date.prototype.format = function(fmt) {
 }
 */
 
-import  request from './js/NetUtils.js'
-import api from './js/url.js'
+import  request from './NetUtils.js'
+import api from './url.js'
 
 
 let utils = {
 	isEmpty(object) {
+		
 		if (!object) {
 			return true;
 		}
-
+		if(object==""){
+			return true;
+		}
 		if (object instanceof Array) {
 			if (object.length == 0) {
 				return true;
@@ -117,4 +120,4 @@ let utils = {
 
 console.log(utils)
 
-module.exports = utils;
+export default utils;

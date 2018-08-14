@@ -87,8 +87,8 @@
   <scroll-view  class="scroll-view" scroll-y style="height:100%;width:100%">
    
     <view class="container">
-     <text class="tip">{{tip}} </text>
-     <text class="courage">{{couragementTip}}</text>
+     <text class="tip" wx-if="{{isShowTip}}">{{tip}} </text>
+     <text class="courage" wx-if="{{isShowCourage}}">{{couragementTip}}</text>
      
      <image class = "praise"  mode="aspectFit" src="../../asset/praise/1.png"></image>
      <button class="confirm"  bindtap="onConfirm">去签到吧</button>
@@ -99,7 +99,7 @@
    </view>
    <view class="footer">
   <!--   <navigator url="../index/readMe"  style="font-size:25rpx;margin-top:30rpx;color:#26a2ff">了解更多</navigator> -->
-    <view class="weui-footer__text">Copyright © 2018-2020 xiongbin.top</view>
+    <view class="weui-footer__text">Copyright © 2018-2020 </view>
   </view>
 </scroll-view>
 </template>
@@ -110,8 +110,16 @@ import wepy from 'wepy'
 import BasePage from '../BasePage'
 import  request from '../../js/NetUtils.js'
 import    api  from '../../js/url.js'
-
+import  utils from '@/js/utils.js'
 export default class Index extends  BasePage {
+    config = {
+      'navigationBarTitleText': '签到',
+      'navigationBarTextStyle': 'white',
+      'navigationBarBackgroundColor': '#26a2ff',
+      'disableScroll': false,
+      'enablePullDownRefresh': false,
+      'backgroundTextStyle': 'dark'
+    }
   config = {
     navigationBarTitleText: '签到'
   }
@@ -125,11 +133,23 @@ export default class Index extends  BasePage {
    src: '',
  }
  computed = {
+  isShowCourage(){
+   return !utils.isEmpty(this.couragementTip)
+  },
+  isShowTip(){
+    return !utils.isEmpty(this.tip)
+  }
  }
+
+ 
  methods = {
+
+
+
   onConfirm(){
     wx.navigateTo({
       url:  './submit?isResign=2'
+     //url:  '../info/info'
     })   
   },
 
@@ -147,6 +167,7 @@ events = {
 }
 
 onLoad(){
+ 
   let that = this;
   let waitTime=0
   let userid= wx.getStorageSync("userId") 

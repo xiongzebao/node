@@ -28,8 +28,11 @@
 }
 
 .confirm{
-  width: 80%;
-  margin-top: 120rpx;
+   width: 80%;
+  margin-top: 50rpx;
+  background: #26a2ff;
+  color: white;
+  font-size: 30rpx;
 }
 </style>
 <template>
@@ -54,7 +57,8 @@
   <text class ="tipText" space="ensp">{{text}}</text>
   <button class="confirm" loading="{{showLoading}}" bindtap="onConfirm">{{btnValue}}</button>
 
-  <button class="confirm" wx:if="{{canIUse}}" open-type="getUserInfo" bindgetuserinfo="bindGetUserInfo">授权登录</button>
+  <button class="confirm" wx:if="{{canIUse}}" open-type="getUserInfo" >授权登录</button>
+
   <view wx:else>无法授权登录，请升级微信App版本</view>
 
 
@@ -82,6 +86,14 @@ import    api  from '@/js/url.js'
 import commenUtils  from '../../js/commenUtils'
 console.log(commenUtils)
 export default class CompleteUserInfo extends  BasePage {
+    config = {
+      'navigationBarTitleText': '完善信息',
+      'navigationBarTextStyle': 'white',
+      'navigationBarBackgroundColor': '#26a2ff',
+      'disableScroll': false,
+      'enablePullDownRefresh': false,
+      'backgroundTextStyle': 'dark'
+    }
 
   minxins=[appMixin]
   config = {
@@ -117,6 +129,9 @@ export default class CompleteUserInfo extends  BasePage {
   }
 
   computed = {
+      nickName(){
+        return this.userInfo.nickName;
+      }
  /*   gender(){
       return this.genderArray[this.genderIndex];
     }*/

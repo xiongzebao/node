@@ -8,6 +8,12 @@
    padding: 10rpx;
    font-size: 25rpx;
 }
+.sign{
+  color:#26a2ff;
+   text-decoration:underline;
+    padding: 10rpx;
+   font-size: 25rpx;
+}
 .comment-container{
   margin-top: 200rpx;
   display: flex;
@@ -25,7 +31,10 @@
  :endDate.sync="endDate"
  :hasIconList.sync="hasIconList"
  ></wepyCanlendar> 
- <view class="comment-container"> <text class="comment">{{comment}}</text></view>
+ <view class="comment-container" wx-if="{{showTip}}"> 
+  <text class="comment" wx-if="{{showComment}}">{{comment}}</text> 
+  <text @tap="goSign" wx-if="{{showSign}}" class="sign">{{signTip}}</text>
+</view>
 </view>
 </template>
 
@@ -39,34 +48,66 @@ import api from '../../js/url.js'
 import InterfaceUtils from '../../js/InterfaceUtils'
 
 export default class Stat extends BasePage {
+    config = {
+      'navigationBarTitleText': '统计',
+      'navigationBarTextStyle': 'white',
+      'navigationBarBackgroundColor': '#26a2ff',
+      'disableScroll': false,
+      'enablePullDownRefresh': false,
+      'backgroundTextStyle': 'dark'
+    }
   components = {
     wepyCanlendar
   }
   computed = {
+    showTip(){
+      return this.showSign||this.showComment;
+    }
+
 
   }
   onLoad() {
-    let that = this;
+   
       //请求当月的签到信息
       this.reqSignInfo(dayjs().format("YYYY-MM"));
     }
     data = {
       currentDate: dayjs().format("YYYY-MM-DD"),
       startDate: '2017-01-01',
-      endDate: '2018-09-01',
+      endDate: '2019-09-01',
       hasIconList: [],
       days: [],
-      comment: ""
+      selDate:"",
+      comment: "",
+      showSign:false,
+      showComment:false,
+      isNeedRefresh:false,
+      signTip:"去补卡"
     } // 页面所需数据均需在这里声明，可用于模板数据绑定
+
+
+    onShow(){
+      
+
+      if(this.isNeedRefresh){
+        this.isNeedRefresh = false;
+        this.showComment=false;
+        this.showSign=false;
+      //请求当月的签到信息
+        this.reqSignInfo(dayjs().format("YYYY-MM"));
+
+      }
+
+    }
 
     reqSignInfo(yearmonth){
      let that = this;
-     console.log(yearmonth);
+    //查询这一个月的打卡记录
      request.post(api.ApiSignQuery,{queryFlag:3,yearmonth:yearmonth})
      .then((data) => {
       that.days = data.datas.list;
+      console.log(`这个月的打卡记录: `)
       console.log(that.days)
-       
       that.days.forEach((item) => {
         let t = {
               index: dayjs(item.signDate).date(),//选中标记的日期（如2018-06-09）
@@ -79,35 +120,73 @@ export default class Stat extends BasePage {
          })
    }
 
+   methods={
+    goSign(){
+        this.isNeedRefresh = true;
+        let isResign = this.getDay(0)==this.selDate?2:1;
+        let selDate = this.selDate
+        wx.navigateTo({
+            url:  `../sign/submit?isResign=${isResign}&signDate= ${selDate}}`
+          })
+    },
+   }
    events = {
 
       //日历当前时间改变回调
       calChangeCurrentDate: function(date, e) {
-        console.log("changekkkkk")
+         this.showComment=false;
+         this.showSign=false;
         this.hasIconList=[];
         this.reqSignInfo(date);
       },
 
       //选择那一天回调
       calChangeSelectedDay: function(date, e) {
-         
+         this.selDate = date;
+          this.showComment = true;
+          this.showSign = false;
+         //是否是今天以后,如果选择的是今天以后的日期，提示打卡未开始
+          let isAfterNow = dayjs(date).isAfter(dayjs(this.getDay(0)))
+          if(isAfterNow){
+               this.comment = "打卡未开始";
+               return;
+          }
+          //是否打过卡，如果打过卡显示打卡记录
         for (let i = 0; i < this.days.length; i++) {
-          if (this.days[i].signTime == date) {
-            console.log(this.days[i].signComment)
+          if (this.days[i].signDate == date) {  
             this.comment = this.days[i].signComment
             return;
           }
         }
+        //未打卡显示
+        this.showNotSignTip(date);
         
-        /*  let t= dayjs(date).isAfter( dayjs(this.getDay(-3)))//是否在最近三天内
-          if(t&&true){
-            wx.navigateTo({
-            url:  '../sign/submit?isResign=1&signDate='+date
-          })
-         }*/
-         this.comment = `您${date}没有签到`
        }
      }
+
+     //1,未打卡仅显示打卡记录，2，补卡提示，3，打卡提示，4，未到打卡时间提示
+  showNotSignTip(date) {
+    if (date == this.getDay(0)) {
+      this.comment = `您今天未打卡`
+      this.signTip = "去打卡";
+      this.showSign = true;
+      return;
+    }
+    if (date == this.getDay(-1)) {
+      this.comment = `您昨天未打卡`
+      this.signTip = "去补卡";
+      this.showSign = true;
+       return;
+    }
+    if (date == this.getDay(-2)) {
+      this.comment = `您前天未打卡`
+      this.signTip = "去补卡";
+      this.showSign = true;
+       return;
+    }
+     
+    this.comment = `您${this.selDate}没有签到`
+  }
 
      getDay(day){  
        var today = new Date();  
